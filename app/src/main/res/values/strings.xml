@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Color Up X</string>
+    <string name="game_over">Game Over</string>
+
+    <string name="score">Score</string>
+    <string name="high_score">High Score</string>
+
+    <string name="save_game">Save Game</string>
+    <string name="new_game">New Game</string>
+</resources>
