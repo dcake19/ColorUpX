@@ -585,12 +585,10 @@ public class GameView extends View
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
             }
         });
 
@@ -888,7 +886,6 @@ public class GameView extends View
     }
 
     public void pause(){
-
         if(!mGamePaused) {
             mGamePaused = true;
             mController.pause();
@@ -897,10 +894,11 @@ public class GameView extends View
             for (Integer i : keySet) {
                 mFallingSquares.get(i).animator.pause();
             }
-
-
         }
-        else{
+    }
+
+    public void resume(){
+        if(mGamePaused){
             mGamePaused = false;
             Set<Integer> keySet = mFallingSquares.keySet();
             for (Integer i : keySet) {
@@ -911,8 +909,6 @@ public class GameView extends View
             }
             if(mBoardAnimators.size()>0) mBoardAnimators.getFirst().resume();
             mController.resume();
-
-
         }
     }
 

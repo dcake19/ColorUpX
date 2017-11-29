@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_game_paused"
-              android:background="@color/colorAccent"
-              android:orientation="vertical"
-              android:gravity="center"
-              android:layout_gravity="center"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_game_paused"
+    android:background="@color/colorGameOverBackground"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
     <TextView
+        android:id="@+id/game_paused_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game Paused"/>
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_large"
+        android:text="@string/game_paused"/>
+
+    <Button
+        android:id="@+id/btn_resume"
+        android:theme="@style/AppTheme.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/resume"/>
 
     <Button
         android:id="@+id/btn_save_game"
+        android:theme="@style/AppTheme.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_game"/>
 
     <Button
         android:id="@+id/btn_new_game"
+        android:theme="@style/AppTheme.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new_game"/>
