@@ -13,4 +13,9 @@
 
     <string name="play_game">Play Game</string>
     <string name="instructions">Instructions</string>
+
+
+    <string name="instructions_page_1">instructions page 1</string>
+    <string name="instructions_page_2">instructions page 2</string>
+    <string name="instructions_page_3">instructions page 3</string>
 </resources>

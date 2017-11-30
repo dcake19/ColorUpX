@@ -38,13 +38,13 @@ public class GameView extends View
         implements GestureDetector.OnGestureListener{
 
     private GestureDetectorCompat mGestureDetector;
-    private GameController mController;
-    private int mMaxWidth,mMaxHeight;
-    private int mRows = 12;
-    private int mColumns = 6;
-    private int mBoardStartRow = 9;
+    protected GameController mController;
+    protected int mMaxWidth,mMaxHeight;
+    protected int mRows = 12;
+    protected int mColumns = 6;
+    protected int mBoardStartRow = 9;
     private float mSquareSideLength;
-    private int mSquareMargin = 8;
+    //private int mSquareMargin = 8;
     private int mBackgroundSquareCornerRadius = 24;
     private int mSquareCornerRadius = 0;
     private int mSquareMarginPx;
@@ -61,12 +61,12 @@ public class GameView extends View
     // the squares falling in the well
     private Hashtable<Integer,SquareAnimation> mFallingSquares;
     private LinkedList<AnimatableRectF> mMoveFromWellToNewRow = new LinkedList<>();
-    private int mFlingLocks = 0;
+    protected int mFlingLocks = 0;
     private int mLastDirection = 0;
     private LinkedList<Animator> mBoardAnimators = new LinkedList<>();
     private boolean mBoardAnimatorRunning = false;
     private boolean mModelUpdating = false;
-    private boolean mGamePaused = false;
+    protected boolean mGamePaused = false;
 
     List<ScoreUpdateListener> mScoreUpdateListeners;
     List<GameOverListener> mGameOverListeners = new ArrayList<>();
@@ -194,11 +194,14 @@ public class GameView extends View
         invalidate();
     }
 
-    private void setDimensions(){
-        if(mRows > 4 && mRows<=6) mSquareMargin = 6;
-        else if(mRows > 6) mSquareMargin = 4;
+    protected void setDimensions(){
+        //if(mRows > 4 && mRows<=6) mSquareMargin = 6;
+        //else if(mRows > 6) mSquareMargin = 4;
 
-        mSquareMarginPx = dpToPx(mSquareMargin);
+        float maxSquareSize = Math.min(mMaxWidth/mColumns,mMaxHeight/mRows);
+        mSquareMarginPx = (int)Math.round(maxSquareSize*0.10);
+
+        //mSquareMarginPx = dpToPx(mSquareMargin);
 
         mSquareSideLength = getSquareSideLength();
 
