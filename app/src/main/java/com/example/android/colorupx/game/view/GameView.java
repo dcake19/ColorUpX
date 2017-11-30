@@ -53,7 +53,6 @@ public class GameView extends View
     private Paint mEmptySquarePaint;
     private RectF[][] mEmptySquares;
     private AnimatableRectF[][] mSquares;
-    private GameOverRect mGameOverRect;
     private int mFallSquareDuration = 500;
     private int mMoveSquareDuration = 100;
     private int mMergeAnimationDuration = 200;
@@ -68,6 +67,25 @@ public class GameView extends View
     private boolean mBoardAnimatorRunning = false;
     private boolean mModelUpdating = false;
     private boolean mGamePaused = false;
+
+    List<ScoreUpdateListener> mScoreUpdateListeners;
+    List<GameOverListener> mGameOverListeners = new ArrayList<>();
+
+    public void addScoreUpdateListener(ScoreUpdateListener listener){
+        mScoreUpdateListeners.add(listener);
+    }
+
+    public interface ScoreUpdateListener{
+        void scoreUpdated(Integer score);
+    }
+
+    public void addGameOverListener(GameOverListener listener){
+        mGameOverListeners.add(listener);
+    }
+
+    public interface GameOverListener{
+        void gameOver();
+    }
 
 
     @TargetApi(21)
@@ -97,16 +115,6 @@ public class GameView extends View
         initColors();
         mScoreUpdateListeners = new ArrayList<>();
         init(context);
-    }
-
-    List<ScoreUpdateListener> mScoreUpdateListeners;
-
-    public void addScoreUpdateListener(ScoreUpdateListener listener){
-        mScoreUpdateListeners.add(listener);
-    }
-
-    public interface ScoreUpdateListener{
-        void scoreUpdated(Integer score);
     }
 
     private void initColors(){
@@ -200,8 +208,8 @@ public class GameView extends View
         mBackgroundRect.right = 2*mSquareMarginPx + mColumns*(mSquareSideLength+mSquareMarginPx);
         mBackgroundRect.bottom = 2*mSquareMarginPx + mRows*(mSquareSideLength+mSquareMarginPx);
 
-        mGameOverRect = new GameOverRect(getContext(),mBackgroundRect.left,mBackgroundRect.top,
-                mBackgroundRect.right, mBackgroundRect.bottom,mSquareCornerRadius);
+        //mGameOverRect = new GameOverRect(getContext(),mBackgroundRect.left,mBackgroundRect.top,
+       //        mBackgroundRect.right, mBackgroundRect.bottom,mSquareCornerRadius);
 
         mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBackgroundPaint.setColor(mBackgroundColor);
@@ -274,8 +282,6 @@ public class GameView extends View
                     if (mSquares[i][j] != null) mSquares[i][j].drawToCanvas(canvas);
         }
 
-        mGameOverRect.drawToCanvas(canvas);
-
         Set<Integer> keySet = mFallingSquares.keySet();
         for(Integer i:keySet){
             mFallingSquares.get(i).rect.drawToCanvas(canvas);
@@ -307,8 +313,9 @@ public class GameView extends View
     }
 
     public void gameOver(){
-        mGameOverRect.setGameOver(true);
-        invalidate();
+        for(GameOverListener gol:mGameOverListeners){
+            gol.gameOver();
+        }
     }
 
     public void update(final ArrayList<UpdateSquare> updates, final int[][] updatedBoard, int lastDirection){
@@ -659,7 +666,6 @@ public class GameView extends View
             changeFallingSquaresYTranslation();
             invalidate();
         }
-
     }
 
     private void changeFallingSquaresYTranslation(){

@@ -29,10 +29,13 @@ public class GameFragment extends Fragment {
     @BindView(R.id.score) TextView mTextViewScore;
     @BindView(R.id.btn_pause) ImageButton mButtonPause;
     @BindView(R.id.layout_game_paused) LinearLayout mLayoutGamePaused;
+    @BindView(R.id.layout_game_over) LinearLayout mLayoutGameOver;
     @BindView(R.id.btn_start) Button mButtonStartGame;
     @BindView(R.id.btn_resume) Button mButtonResume;
     @BindView(R.id.btn_save_game) Button mButtonSaveGame;
     @BindView(R.id.btn_new_game) Button mButtonNewGame;
+    @BindView(R.id.btn_start_new_game) Button mButtonStartNewGame;
+    @BindView(R.id.game_over_title) TextView mGameOverTitle;
     @BindView(R.id.game_paused_title) TextView mGamePausedTitle;
     private SaveGame mSaveGame;
 
@@ -80,6 +83,16 @@ public class GameFragment extends Fragment {
             }
         });
 
+        mGameView.addGameOverListener(new GameView.GameOverListener() {
+            @Override
+            public void gameOver() {
+                mButtonPause.setEnabled(false);
+                mButtonStartGame.setVisibility(View.INVISIBLE);
+                mLayoutGamePaused.setVisibility(View.INVISIBLE);
+                mLayoutGameOver.setVisibility(View.VISIBLE);
+            }
+        });
+
         return rootview;
     }
 
@@ -100,6 +113,9 @@ public class GameFragment extends Fragment {
         mButtonSaveGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.save_game)));
         mButtonNewGame.setAllCaps(false);
         mButtonNewGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.new_game)));
+        mGameOverTitle.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.game_over)));
+        mButtonStartNewGame.setAllCaps(false);
+        mButtonStartNewGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.new_game)));
     }
 
     private void loadGame(){
@@ -131,6 +147,8 @@ public class GameFragment extends Fragment {
             mGameView.setParamters(12,6,9,3,6,9,
                     maxWidth,maxHeight);
         }
+
+        mLayoutGameOver.setVisibility(View.INVISIBLE);
     }
 
 
@@ -191,10 +209,11 @@ public class GameFragment extends Fragment {
         mSaveGame.saveGameToFile(saveGameState);
     }
 
-    @OnClick(R.id.btn_new_game)
+    @OnClick({R.id.btn_new_game,R.id.btn_start_new_game})
     public void newGame(){
         mButtonStartGame.setVisibility(View.VISIBLE);
         mLayoutGamePaused.setVisibility(View.INVISIBLE);
+        mLayoutGameOver.setVisibility(View.INVISIBLE);
         mGameView.startNewGame();
     }
 

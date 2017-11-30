@@ -21,7 +21,7 @@
     <color name="colorSquare8">#4CAF50</color>
     <color name="colorSquare9">#FF5722</color>
 
-    <color name="colorGameOverBackground">#65656565</color>
+    <color name="colorGameOverBackground">#89656565</color>
     <color name="colorGameOverText">#000000</color>
 
 </resources>
