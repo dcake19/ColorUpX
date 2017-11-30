@@ -50,7 +50,7 @@ public class GameFragment extends Fragment {
         ButterKnife.bind(this,rootview);
         mButtonPause.setEnabled(false);
 
-        //mGameView.setParamters(12,6,9,3,6,9);
+
 
 //        int[][] board = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
 //                {0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
