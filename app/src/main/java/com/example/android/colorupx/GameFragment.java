@@ -1,5 +1,6 @@
 package com.example.android.colorupx;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ public class GameFragment extends Fragment {
 
     @BindView(R.id.game_view) GameView mGameView;
     @BindView(R.id.score) TextView mTextViewScore;
+    @BindView(R.id.high_score) TextView mTextViewHighScore;
     @BindView(R.id.btn_pause) ImageButton mButtonPause;
     @BindView(R.id.layout_game_paused) LinearLayout mLayoutGamePaused;
     @BindView(R.id.layout_game_over) LinearLayout mLayoutGameOver;
@@ -38,12 +40,14 @@ public class GameFragment extends Fragment {
     @BindView(R.id.game_over_title) TextView mGameOverTitle;
     @BindView(R.id.game_paused_title) TextView mGamePausedTitle;
     private SaveGame mSaveGame;
+    private HighScore mSavedHighScore;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mSaveGame = new SaveGame(getContext());
+        mSavedHighScore = new HighScore(getActivity());
 
         View rootview = inflater.inflate(R.layout.game_fragment, container, false);
 
@@ -51,7 +55,7 @@ public class GameFragment extends Fragment {
         mButtonPause.setEnabled(false);
 
 
-
+        mTextViewHighScore.setText(String.valueOf(mSavedHighScore.getHighScore()));
 //        int[][] board = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
 //                {0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
 //                {6,0,4,0,7,0},{3,2,0,0,0,9},{1,1,2,0,0,9},{0,0,0,0,0,0}};
@@ -80,6 +84,8 @@ public class GameFragment extends Fragment {
             @Override
             public void scoreUpdated(Integer score) {
                 mTextViewScore.setText(score.toString());
+                mSavedHighScore.setHighScore(score);
+                mTextViewHighScore.setText(String.valueOf(mSavedHighScore.getHighScore()));
             }
         });
 
