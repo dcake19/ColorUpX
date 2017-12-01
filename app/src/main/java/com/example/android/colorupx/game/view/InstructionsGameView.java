@@ -8,6 +8,7 @@ import com.example.android.colorupx.game.model.GameBoard;
 import com.example.android.colorupx.game.view.GameView;
 
 public class InstructionsGameView extends GameView {
+
     public InstructionsGameView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
@@ -24,7 +25,7 @@ public class InstructionsGameView extends GameView {
         super(context, attrs);
     }
 
-    public void setSwipeDemoBoard(int maxWidth,int maxHeight){
+    public void setSwipeDemoBoard(int[][] board,int maxWidth,int maxHeight){
         mFlingLocks = 1000;
         mMaxWidth = maxWidth;
         mMaxHeight = maxHeight;
@@ -33,8 +34,7 @@ public class InstructionsGameView extends GameView {
         mBoardStartRow = 3;
         setDimensions();
         mGamePaused = false;
-        int[][] board = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
-                {7,0,0,7,0,3},{0,8,4,0,0,0},{0,9,0,2,6,0}};
+
         mController = new GameController(this, board, 0, mBoardStartRow, 3,9,500,true);
 
         invalidate();
@@ -42,16 +42,13 @@ public class InstructionsGameView extends GameView {
     }
 
     public void swipeBoard(int direction){
-        mController.swipe(direction);
-       // mController.swipe(GameBoard.DIRECTION_DOWN);
-      //  mController.swipe(GameBoard.DIRECTION_LEFT);
-//        mFlingLocks = 1000;
-//        mGamePaused = false;
-//        mController.swipe(direction);
-    }
+        try {
+            mController.swipe(direction);
+        }catch (Exception e){
 
-    public void swipeBoardDemo(){
+        }
 
     }
+
 
 }
