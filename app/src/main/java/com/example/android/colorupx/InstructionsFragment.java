@@ -5,75 +5,118 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.colorupx.game.model.GameBoard;
 import com.example.android.colorupx.game.view.GameView;
 import com.example.android.colorupx.game.view.InstructionsGameView;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+
 public class InstructionsFragment extends Fragment {
 
-    @BindView(R.id.game_view)
-    InstructionsGameView mGameView;
+    @BindView(R.id.game_view) InstructionsGameView mGameView;
+    @BindView(R.id.instructions) TextView mInstructions;
 
-    private boolean mFirst = true;
+    private int mPage;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mPage = getArguments().getInt(InstructionsActivity.PAGE,1);
+
         View rootview = inflater.inflate(R.layout.instructions_page_1,container,false);
+
         ButterKnife.bind(this,rootview);
 
         setGameView();
-
+        setInstructions();
         return rootview;
     }
 
     private void setGameView(){
         setGameViewStartingPoint();
-        mGameView.addScoreUpdateListener(new GameView.ScoreUpdateListener() {
-            @Override
-            public void scoreUpdated(Integer score) {
-                if(score<4) {
-                    if (score == 1)
-                        startAnimation(GameBoard.DIRECTION_DOWN);
-                    else if (score == 2)
-                        startAnimation(GameBoard.DIRECTION_LEFT);
-                    else
-                        startAnimation(GameBoard.DIRECTION_UP);
+        if(mPage==1) {
+            mGameView.addScoreUpdateListener(new GameView.ScoreUpdateListener() {
+                @Override
+                public void scoreUpdated(Integer score) {
+                    if (score < 4) {
+                        if (score == 1)
+                            startAnimation(GameBoard.DIRECTION_DOWN);
+                        else if (score == 2)
+                            startAnimation(GameBoard.DIRECTION_LEFT);
+                        else
+                            startAnimation(GameBoard.DIRECTION_UP);
+                    } else {
+                        resetBoard();
+                    }
                 }
-                else {
+            });
+        } else if(mPage==2){
+            mGameView.addFallingSquareAddedListener(
+                    new InstructionsGameView.FallingSquareAddedListener() {
+                @Override
+                public void squareAdded(int column) {
+                    if(column==3) mGameView.addFallingSquare(4,1,2);
+                    else if(column==4)startAnimation(GameBoard.DIRECTION_DOWN);
+                }
+            });
+            mGameView.addScoreUpdateListener(new GameView.ScoreUpdateListener() {
+                @Override
+                public void scoreUpdated(Integer score) {
                     resetBoard();
-                    try {
-//                        setGameViewStartingPoint();
-//                        startAnimation(GameBoard.DIRECTION_RIGHT);
-                    }catch (IllegalStateException e){}
                 }
-            }
-        });
+            });
+        }else if(mPage==3){
+            mGameView.addFallingSquareAddedListener(
+                    new InstructionsGameView.FallingSquareAddedListener() {
+                        @Override
+                        public void squareAdded(int column) {
+                            if(column==4) {
+                                mGameView.addFallingSquare(5, 1, 2);
+                                Observable.timer(1, TimeUnit.SECONDS)
+                                        .subscribeOn(Schedulers.newThread())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Consumer<Long>() {
+                                            @Override
+                                            public void accept(Long l) throws Exception {
+                                                try {
+                                                    mGameView.swipeSquareLeft(2);
+                                                }catch (IllegalStateException e){}
+                                            }
+                                        });
+                            }
+                            else if(column==0)resetBoard();
+                        }
+                    });
+        }
     }
 
     private void setGameViewStartingPoint(){
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         int maxWidth = metrics.widthPixels/2;
         int maxHeight = metrics.heightPixels/2;
-        int[][] board = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
-                {3,7,0,7,0,3},{2,8,4,0,0,0},{5,9,0,2,6,0}};
-        mGameView.setSwipeDemoBoard(board,maxWidth,maxHeight);
-       // startAnimation(GameBoard.DIRECTION_RIGHT);
+        if(mPage<3) {
+            int[][] board = {{0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0},
+                    {3, 7, 0, 7, 0, 3}, {2, 8, 4, 0, 0, 0}, {5, 9, 0, 2, 6, 0}};
+            mGameView.setBoardDemo(board, maxWidth, maxHeight);
+        }
+        else{
+            mGameView.setFallingSquareDemo(maxWidth,maxHeight);
+        }
     }
 
     private void startAnimation(int direction){
@@ -96,33 +139,47 @@ public class InstructionsFragment extends Fragment {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long l) throws Exception {
-                        setGameViewStartingPoint();
-                        startAnimation(GameBoard.DIRECTION_RIGHT);
+                        try {
+                            setGameViewStartingPoint();
+                            startInstructions();
+                        }catch (IllegalStateException e){}
                     }
                 });
     }
 
     @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-        if(menuVisible) {
-            // setGameViewStartingPoint();
-            if (mFirst) {
-                mFirst = false;
-                startAnimation(GameBoard.DIRECTION_RIGHT);
-            } else {
-                setGameViewStartingPoint();
-                startAnimation(GameBoard.DIRECTION_RIGHT);
-            }
+    public void onStart() {
+        super.onStart();
+        startInstructions();
+    }
+
+    private void startInstructions(){
+        if(mPage==1) startAnimation(GameBoard.DIRECTION_RIGHT);
+        else if(mPage==2) mGameView.addFallingSquare(3,3,1);
+        else if(mPage==3) {
+            mGameView.addFallingSquare(3, 3, 1);
+            Observable.timer(1, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(Long l) throws Exception {
+                            try {
+                                mGameView.tapSquareRight(1);
+                            }catch (IllegalStateException e){}
+                        }
+                    });
         }
-
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void setInstructions(){
+        if(mPage==1){
+            mInstructions.setText(getString(R.string.instructions_page_1));
+        }else if(mPage==2){
+            mInstructions.setText(getString(R.string.instructions_page_2));
+        }else {
+            mInstructions.setText(getString(R.string.instructions_page_3));
+        }
     }
-
 
 }

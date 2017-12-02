@@ -5,7 +5,10 @@ import android.util.AttributeSet;
 
 import com.example.android.colorupx.game.controller.GameController;
 import com.example.android.colorupx.game.model.GameBoard;
-import com.example.android.colorupx.game.view.GameView;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstructionsGameView extends GameView {
 
@@ -25,7 +28,7 @@ public class InstructionsGameView extends GameView {
         super(context, attrs);
     }
 
-    public void setSwipeDemoBoard(int[][] board,int maxWidth,int maxHeight){
+    public void setBoardDemo(int[][] board,int maxWidth,int maxHeight){
         mFlingLocks = 1000;
         mMaxWidth = maxWidth;
         mMaxHeight = maxHeight;
@@ -35,20 +38,40 @@ public class InstructionsGameView extends GameView {
         setDimensions();
         mGamePaused = false;
 
-        mController = new GameController(this, board, 0, mBoardStartRow, 3,9,500,true);
+        mController = new GameController(this, board, 0, mBoardStartRow, 3,9,true);
 
         invalidate();
+    }
 
+    public void setFallingSquareDemo(int maxWidth,int maxHeight){
+        mFlingLocks = 1000;
+        mMaxWidth = maxWidth;
+        mMaxHeight = maxHeight;
+        mRows = 6;
+        mColumns = 6;
+        mBoardStartRow = 5;
+        setDimensions();
+        mGamePaused = false;
+
+        int[][] board = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
+                {0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0}};
+        mController = new GameController(this, board, 0, mBoardStartRow, 0,9,true);
+
+        invalidate();
     }
 
     public void swipeBoard(int direction){
         try {
             mController.swipe(direction);
         }catch (Exception e){
-
         }
-
     }
 
+    public void tapSquareRight(int id){
+        tapSquare(GameBoard.DIRECTION_RIGHT,mFallingSquares.get(id));
+    }
 
+    public void swipeSquareLeft(int id){
+        swipeSquare(GameBoard.DIRECTION_LEFT,mFallingSquares.get(id));
+    }
 }

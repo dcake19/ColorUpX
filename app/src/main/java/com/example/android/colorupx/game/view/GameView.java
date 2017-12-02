@@ -59,7 +59,7 @@ public class GameView extends View
     private int mBackgroundColor;
     private int mEmptySquareColor;
     // the squares falling in the well
-    private Hashtable<Integer,SquareAnimation> mFallingSquares;
+    protected Hashtable<Integer,SquareAnimation> mFallingSquares;
     private LinkedList<AnimatableRectF> mMoveFromWellToNewRow = new LinkedList<>();
     protected int mFlingLocks = 0;
     private int mLastDirection = 0;
@@ -70,6 +70,7 @@ public class GameView extends View
 
     List<ScoreUpdateListener> mScoreUpdateListeners;
     List<GameOverListener> mGameOverListeners = new ArrayList<>();
+    List<FallingSquareAddedListener> mFallingSquareAddedListeners = new ArrayList<>();
 
     public void addScoreUpdateListener(ScoreUpdateListener listener){
         mScoreUpdateListeners.add(listener);
@@ -87,6 +88,13 @@ public class GameView extends View
         void gameOver();
     }
 
+    public void addFallingSquareAddedListener(FallingSquareAddedListener listener){
+        mFallingSquareAddedListeners.add(listener);
+    }
+
+    public interface FallingSquareAddedListener{
+        void squareAdded(int column);
+    }
 
     @TargetApi(21)
     public GameView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -467,6 +475,7 @@ public class GameView extends View
     }
 
     public void moveFallingSquareToNewRow(final int newRow, final int column,final AnimatableRectF rect){
+        Log.i("Instructions","move to new row " );
         final ObjectAnimator translateYAnimation =
                 ObjectAnimator.ofFloat(rect,"translationY",
                         rect.top,getPxLocation(newRow));
@@ -498,6 +507,10 @@ public class GameView extends View
                 startAnimator(false);
                 //mAllowFling = true;
                 if(mFlingLocks!=0)mFlingLocks--;
+
+                for(FallingSquareAddedListener fsal:mFallingSquareAddedListeners){
+                    fsal.squareAdded(column);
+                }
             }
             @Override
             public void onAnimationCancel(Animator animator) {
@@ -607,7 +620,7 @@ public class GameView extends View
         if(!mGamePaused)animation.start();
     }
 
-    private void swipeSquare(int direction,SquareAnimation squareAnimation){
+    protected void swipeSquare(int direction,SquareAnimation squareAnimation){
 
         ArrayList<Animator> animators = squareAnimation.animator.getChildAnimations();
         ObjectAnimator objectAnimator = (ObjectAnimator) animators.get(0);
@@ -628,7 +641,7 @@ public class GameView extends View
         objectAnimator.start();
     }
 
-    private void tapSquare(int direction,SquareAnimation squareAnimation){
+    protected void tapSquare(int direction,SquareAnimation squareAnimation){
         ArrayList<Animator> animators = squareAnimation.animator.getChildAnimations();
         ObjectAnimator objectAnimator = (ObjectAnimator) animators.get(0);
         float xValue = 0;
@@ -661,6 +674,9 @@ public class GameView extends View
         invalidate();
         mController.animationComplete();
         if(mFlingLocks!=0)mFlingLocks--;
+        for(FallingSquareAddedListener fsal:mFallingSquareAddedListeners){
+            fsal.squareAdded(column);
+        }
     }
 
     public void setWellRows(int wellRows){
@@ -937,7 +953,7 @@ public class GameView extends View
         invalidate();
     }
 
-    private class SquareAnimation{
+    protected class SquareAnimation{
         int column;
         AnimatableRectF rect;
         AnimatorSet animator;

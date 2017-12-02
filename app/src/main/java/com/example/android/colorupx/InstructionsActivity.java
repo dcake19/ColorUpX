@@ -1,22 +1,32 @@
 package com.example.android.colorupx;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.android.colorupx.utils.TextUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class InstructionsActivity extends AppCompatActivity {
 
-    @BindView(R.id.pager) ViewPager mPager;
-    private ArrayList<Fragment> mFragments = new ArrayList<>(3);
+    private final String FRAGMENT = "Instructions Fragment";
+    public static final String PAGE = "page";
+    private InstructionsFragment mFragment;
+    @BindView(R.id.instructions_title) TextView mTitle;
+    @BindView(R.id.btn_previous) ImageButton mButtonPrevious;
+    @BindView(R.id.btn_next) ImageButton mButtonNext;
+    @BindView(R.id.page_number) TextView mTextPageNumber;
+
+    private int mPageNumber = 1;
+    private final int TOTAL_PAGES = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,46 +35,58 @@ public class InstructionsActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mFragments.add(new InstructionsFragment());
-        mFragments.add(new InstructionsFragment());
-        mFragments.add(new InstructionsFragment());
+        setTextColors();
 
-        mPager.setAdapter(new InstructionsPagerAdapter(getSupportFragmentManager()));
-        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+        mTextPageNumber.setText(mPageNumber + "/" + TOTAL_PAGES);
 
-            @Override
-            public void onPageSelected(int position) {
+        mButtonPrevious.setVisibility(View.INVISIBLE);
 
-                Log.i("onPageSelected ", "position: " + position);
-            }
+        FragmentManager fm = getSupportFragmentManager();
+        mFragment = (InstructionsFragment) fm.findFragmentByTag(FRAGMENT);
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                Log.v("Pager","onPageScrollStateChanged " + state);
-            }
-        });
+        if(mFragment ==null) {
+            mFragment = new InstructionsFragment();
+            Bundle args = new Bundle();
+            args.putInt(PAGE,mPageNumber);
+            mFragment.setArguments(args);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-    }
-
-    class InstructionsPagerAdapter extends FragmentStatePagerAdapter {
-
-        public InstructionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = new InstructionsFragment();
-            return fragment;
-            //return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
+            fragmentTransaction.add(R.id.instructions_content, mFragment, FRAGMENT);
+            fragmentTransaction.commit();
         }
     }
+
+    private void setTextColors(){
+        mTitle.setText(TextUtil.getMultiColorString(this,getString(R.string.instructions)));
+    }
+
+    @OnClick(R.id.btn_previous)
+    public void previousPage(){
+        mPageNumber--;
+        mTextPageNumber.setText(mPageNumber + "/" + TOTAL_PAGES);
+        if (mPageNumber==1) mButtonPrevious.setVisibility(View.INVISIBLE);
+        if(mPageNumber==TOTAL_PAGES-1) mButtonNext.setVisibility(View.VISIBLE);
+
+        changeFragment();
+    }
+
+    @OnClick(R.id.btn_next)
+    public void nextPage(){
+        mPageNumber++;
+        mTextPageNumber.setText(mPageNumber + "/" + TOTAL_PAGES);
+        if (mPageNumber==2) mButtonPrevious.setVisibility(View.VISIBLE);
+        if(mPageNumber==TOTAL_PAGES) mButtonNext.setVisibility(View.INVISIBLE);
+        changeFragment();
+    }
+
+    private void changeFragment(){
+        mFragment = new InstructionsFragment();
+        Bundle args = new Bundle();
+        args.putInt(PAGE,mPageNumber);
+        mFragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.instructions_content, mFragment, FRAGMENT);
+        fragmentTransaction.commit();
+    }
+
 }

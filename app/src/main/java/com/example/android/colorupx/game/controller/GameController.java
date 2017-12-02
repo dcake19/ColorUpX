@@ -49,6 +49,13 @@ public class GameController {
         addFallingSquares(delay);
     }
 
+    public GameController(GameView gameView,int[][] board,int score,int boardStartRow,
+                          int minBoardRows,int maxSquareValue,boolean displayBoard) {
+        mGameView = gameView;
+        mGameBoard = new GameBoard(board,score,boardStartRow,minBoardRows,maxSquareValue);
+        if(displayBoard) mGameView.setBoard(mGameBoard.getBoard());
+    }
+
     public void pause(){
         mIntervalObservableOnSubscribe.pause();
     }
