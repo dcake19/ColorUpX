@@ -2,6 +2,7 @@ package com.example.android.colorupx.game.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.example.android.colorupx.game.controller.GameController;
 import com.example.android.colorupx.game.model.GameBoard;
@@ -73,5 +74,15 @@ public class InstructionsGameView extends GameView {
 
     public void swipeSquareLeft(int id){
         swipeSquare(GameBoard.DIRECTION_LEFT,mFallingSquares.get(id));
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent1, MotionEvent motionEvent2, float velocityX, float velocityY) {
+        return true;
     }
 }

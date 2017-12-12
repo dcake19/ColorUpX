@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ public class InstructionsFragment extends Fragment {
 
         mPage = getArguments().getInt(InstructionsActivity.PAGE,1);
 
-        View rootview = inflater.inflate(R.layout.instructions_page_1,container,false);
+        View rootview = inflater.inflate(R.layout.instructions,container,false);
 
         ButterKnife.bind(this,rootview);
 
