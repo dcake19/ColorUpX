@@ -14,7 +14,6 @@
     <string name="play_game">Play Game</string>
     <string name="instructions">Instructions</string>
 
-
     <string name="instructions_page_1">Swipe the grid and all tiles will move in that direction as far as possible.
     If 2 adjacent tiles touch then the numbers will add up to form a new tile.
     When a tile reaches 2048 it disappears.</string>
