@@ -949,7 +949,7 @@ public class GameView extends View
         mLastDirection = 0;
         mBoardStartRow = 9;
         mController.stopFallingSquares();
-        mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,6,9,0);
+        mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,6,10,0);
         invalidate();
     }
 

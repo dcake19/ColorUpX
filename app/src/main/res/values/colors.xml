@@ -13,14 +13,14 @@
 
     <color name="colorSquare1">#E91E63</color>
     <color name="colorSquare2">#9C27B0</color>
-    <color name="colorSquare3">#3F51B5</color>
-    <color name="colorSquare4">#2196F3</color>
+    <color name="colorSquare3">#304FFE</color>
+    <color name="colorSquare4">#1E88E5</color>
     <color name="colorSquare5">#009688</color>
     <color name="colorSquare6">#FFAB00</color>
     <color name="colorSquare7">#1DE9B6</color>
-    <color name="colorSquare8">#4CAF50</color>
+    <color name="colorSquare8">#D50000</color>
     <color name="colorSquare9">#FF5722</color>
-    <color name="colorSquare10">#673AB7</color>
+    <color name="colorSquare10">#512DA8</color>
 
     <color name="colorGameOverBackground">#89656565</color>
     <color name="colorGameOverText">#000000</color>

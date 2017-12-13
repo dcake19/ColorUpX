@@ -50,6 +50,4 @@
         android:textSize="@dimen/text_size_large"
         android:text="@string/instructions"/>
 
-
-
 </LinearLayout>
