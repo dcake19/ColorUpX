@@ -9,12 +9,12 @@ import android.graphics.RectF;
 public class AnimatableRectF extends RectF {
 
     private Integer mValue = 1;
-
+    private Integer mMaxValue = 10;
     private int mSquareCornerRadius;
     private Paint mShapeForegroundPaint;
     private Paint mTextPaint;
     private Context mContext;
-
+    private float mTextSize;
 
     public AnimatableRectF(Context context,float left, float top, float right, float bottom,int squareCornerRadius,int value) {
         super(left, top, right, bottom);
@@ -22,6 +22,7 @@ public class AnimatableRectF extends RectF {
         mSquareCornerRadius = squareCornerRadius;
         mValue = value;
         setPaints();
+        //setTextSize();
     }
 
     private void setPaints(){
@@ -29,6 +30,7 @@ public class AnimatableRectF extends RectF {
         mShapeForegroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         int textSize = (int) (0.7*(right - left));
         mTextPaint.setTextSize(textSize);
+        setTextSize();
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
         setColor();
@@ -38,7 +40,7 @@ public class AnimatableRectF extends RectF {
 
         int color;
 
-        if(mValue<=9) {
+        if(mValue<=mMaxValue) {
             color = mContext.getResources().getColor(
                     mContext.getResources().getIdentifier(
                             "colorSquare" + mValue, "color", mContext.getPackageName()));
@@ -46,13 +48,14 @@ public class AnimatableRectF extends RectF {
         else{
             color = mContext.getResources().getColor(
                     mContext.getResources().getIdentifier(
-                            "colorSquare6", "color", mContext.getPackageName()));
+                            "colorSquare10", "color", mContext.getPackageName()));
         }
 
         mShapeForegroundPaint.setColor(color);
 
-        int textColor  = 0xff000000;
+        int textColor  = 0xffffffff;
         mTextPaint.setColor(textColor);
+        mTextPaint.setFakeBoldText(true);
     }
 
     public int getColor(){
@@ -60,7 +63,7 @@ public class AnimatableRectF extends RectF {
     }
 
     public int getNextColor(){
-        int nextValue = mValue<9 ? mValue+1:9;
+        int nextValue = mValue<mMaxValue ? mValue+1:mMaxValue;
         int color = mContext.getResources().getColor(
                 mContext.getResources().getIdentifier(
                         "colorSquare"+ nextValue, "color", mContext.getPackageName()));
@@ -116,16 +119,33 @@ public class AnimatableRectF extends RectF {
 
     public void drawToCanvas(Canvas canvas){
         canvas.drawRoundRect(this,mSquareCornerRadius,mSquareCornerRadius,mShapeForegroundPaint);
-        changeTextSize();
-        canvas.drawText(mValue.toString(),(right+left)/2,(bottom+top)/2 + mTextPaint.getTextSize()*3/8,mTextPaint);
+        //changeTextSize();
+        //setTextSize();
+        //mTextPaint.setTextSize(mTextSize);
+        canvas.drawText(getText(),(right+left)/2,(bottom+top)/2 + mTextPaint.getTextSize()*3/8,mTextPaint);
     }
 
-    private void changeTextSize(){
-        float textWidth = mTextPaint.measureText(Integer.toString(mValue));
+    private String getText(){
+        Integer text = (int) Math.pow(2,mValue);
+        return text.toString();
+    }
+
+//    private void changeTextSize(){
+//        float textWidth = mTextPaint.measureText(getText());
+//        float squareWidth = right-left;
+//        while(textWidth>0.9*squareWidth){
+//            mTextPaint.setTextSize(mTextPaint.getTextSize()-4);
+//            textWidth = mTextPaint.measureText(Integer.toString(mValue));
+//        }
+//    }
+
+    private void setTextSize(){
+        float textWidth = mTextPaint.measureText("1024");
         float squareWidth = right-left;
-        while(textWidth>0.75*squareWidth){
-            mTextPaint.setTextSize(mTextPaint.getTextSize()-4);
-            textWidth = mTextPaint.measureText(Integer.toString(mValue));
+        while(textWidth>0.9*squareWidth){
+            mTextPaint.setTextSize(mTextPaint.getTextSize()-1);
+            textWidth = mTextPaint.measureText("1024");
         }
+        mTextSize = mTextPaint.getTextSize();
     }
 }

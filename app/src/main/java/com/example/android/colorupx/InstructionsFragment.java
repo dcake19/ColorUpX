@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class InstructionsFragment extends Fragment {
 
         mPage = getArguments().getInt(InstructionsActivity.PAGE,1);
 
-        View rootview = inflater.inflate(R.layout.instructions,container,false);
+        View rootview = inflater.inflate(R.layout.instructions_fragment,container,false);
 
         ButterKnife.bind(this,rootview);
 
@@ -110,7 +111,7 @@ public class InstructionsFragment extends Fragment {
         int maxHeight = metrics.heightPixels/2;
         if(mPage<3) {
             int[][] board = {{0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0},
-                    {3, 7, 0, 7, 0, 3}, {2, 8, 4, 0, 0, 0}, {5, 9, 0, 2, 6, 0}};
+                    {3, 8, 0, 8, 0, 3}, {2, 9, 4, 0, 0, 0}, {5, 10, 0, 2, 6, 0}};
             mGameView.setBoardDemo(board, maxWidth, maxHeight);
         }
         else{
@@ -169,6 +170,19 @@ public class InstructionsFragment extends Fragment {
                         }
                     });
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("InstructionsFragment","onPause" + " page:" + mPage);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //mGameView.pause();
+        Log.i("InstructionsFragment","onStop" + " page:" + mPage);
     }
 
     private void setInstructions(){

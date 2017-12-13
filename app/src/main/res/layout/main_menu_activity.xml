@@ -11,14 +11,28 @@
     >
 
     <TextView
-        android:id="@+id/game_title"
+        android:id="@+id/game_title_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/large_padding"
+        android:paddingRight="@dimen/large_padding"
+        android:paddingTop="@dimen/large_padding"
+        android:paddingLeft="@dimen/large_padding"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_title_large"
+        android:text="2048"/>
+
+    <TextView
+        android:id="@+id/game_title_letters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/large_padding"
+        android:paddingBottom="@dimen/large_padding"
+        android:paddingLeft="@dimen/large_padding"
         android:textStyle="bold"
         android:gravity="center"
         android:textSize="@dimen/text_size_title"
-        android:text="@string/app_name"/>
+        android:text="@string/downfall"/>
 
     <Button
         android:id="@+id/btn_play_game"

@@ -14,7 +14,8 @@ import butterknife.OnClick;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    @BindView(R.id.game_title) TextView mTextViewTitle;
+    @BindView(R.id.game_title_number) TextView mTextViewTitleNumber;
+    @BindView(R.id.game_title_letters) TextView mTextViewTitleLetters;
     @BindView(R.id.btn_play_game) Button mButtonPlayGame;
     @BindView(R.id.btn_instructions) Button mButtonInstructions;
 
@@ -27,7 +28,8 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void setTextColors(){
-        mTextViewTitle.setText(TextUtil.getMultiColorString(this,getString(R.string.app_name)));
+        mTextViewTitleNumber.setText(TextUtil.getMultiColorString(this,"2048"));
+        mTextViewTitleLetters.setText(TextUtil.getMultiColorString(this,getString(R.string.downfall),4));
         mButtonPlayGame.setAllCaps(false);
         mButtonPlayGame.setText(TextUtil.getMultiColorString(this,getString(R.string.play_game)));
         mButtonInstructions.setAllCaps(false);

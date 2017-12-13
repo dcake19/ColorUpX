@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Color Up X</string>
+    <string name="app_name">2048 Downfall</string>
     <string name="game_over">GAME OVER</string>
+
+    <string name="downfall">DOWNFALL</string>
 
     <string name="score">Score</string>
     <string name="high_score">High Score</string>

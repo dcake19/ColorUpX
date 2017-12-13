@@ -16,7 +16,7 @@ public class GameBoard {
     private int mLastDirection = 0;
     private int mScore = 0;
     private boolean mGameOver = false;
-    private int mMaxSquareValue = 6;
+    private int mMaxSquareValue = 10;
 
 
     public GameBoard(int rows,int columns,int wellRows,int minBoardRows,int maxSquareValue) {

@@ -13,10 +13,22 @@ import com.example.android.colorupx.R;
 public class TextUtil {
 
     public static Spannable getMultiColorString(Context context,String string){
+        return getMultiColorString(context, string,0);
+//        Spannable wordtoSpan = new SpannableString(string);
+//        int colorCounter = 0;
+//        for(int i=0;i<wordtoSpan.length();i++){
+//            colorCounter = colorCounter % 10;
+//            if(wordtoSpan.charAt(i)!=' ') colorCounter++;
+//            wordtoSpan.setSpan(new ForegroundColorSpan(getLetterColor(context,colorCounter)), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        }
+//        return wordtoSpan;
+    }
+
+    public static Spannable getMultiColorString(Context context,String string,int startColor){
         Spannable wordtoSpan = new SpannableString(string);
-        int colorCounter = 0;
+        int colorCounter = startColor;
         for(int i=0;i<wordtoSpan.length();i++){
-            colorCounter = colorCounter % 9;
+            colorCounter = colorCounter % 10;
             if(wordtoSpan.charAt(i)!=' ') colorCounter++;
             wordtoSpan.setSpan(new ForegroundColorSpan(getLetterColor(context,colorCounter)), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

@@ -150,7 +150,7 @@ public class GameFragment extends Fragment {
         }else{
             mButtonStartGame.setVisibility(View.VISIBLE);
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
-            mGameView.setParamters(12,6,9,3,6,9,
+            mGameView.setParamters(12,6,9,3,6,10,
                     maxWidth,maxHeight);
         }
 

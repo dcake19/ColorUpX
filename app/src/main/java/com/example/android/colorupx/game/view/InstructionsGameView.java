@@ -39,7 +39,7 @@ public class InstructionsGameView extends GameView {
         setDimensions();
         mGamePaused = false;
 
-        mController = new GameController(this, board, 0, mBoardStartRow, 3,9,true);
+        mController = new GameController(this, board, 0, mBoardStartRow, 3,10,true);
 
         invalidate();
     }
@@ -56,7 +56,7 @@ public class InstructionsGameView extends GameView {
 
         int[][] board = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
                 {0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0}};
-        mController = new GameController(this, board, 0, mBoardStartRow, 0,9,true);
+        mController = new GameController(this, board, 0, mBoardStartRow, 0,10,true);
 
         invalidate();
     }
