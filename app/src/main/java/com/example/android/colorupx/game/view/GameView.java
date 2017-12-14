@@ -203,13 +203,9 @@ public class GameView extends View
     }
 
     protected void setDimensions(){
-        //if(mRows > 4 && mRows<=6) mSquareMargin = 6;
-        //else if(mRows > 6) mSquareMargin = 4;
 
         float maxSquareSize = Math.min(mMaxWidth/mColumns,mMaxHeight/mRows);
         mSquareMarginPx = (int)Math.round(maxSquareSize*0.10);
-
-        //mSquareMarginPx = dpToPx(mSquareMargin);
 
         mSquareSideLength = getSquareSideLength();
 
@@ -218,9 +214,6 @@ public class GameView extends View
         mBackgroundRect.top = 0;
         mBackgroundRect.right = 2*mSquareMarginPx + mColumns*(mSquareSideLength+mSquareMarginPx);
         mBackgroundRect.bottom = 2*mSquareMarginPx + mRows*(mSquareSideLength+mSquareMarginPx);
-
-        //mGameOverRect = new GameOverRect(getContext(),mBackgroundRect.left,mBackgroundRect.top,
-       //        mBackgroundRect.right, mBackgroundRect.bottom,mSquareCornerRadius);
 
         mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBackgroundPaint.setColor(mBackgroundColor);
@@ -453,14 +446,10 @@ public class GameView extends View
                 mController.animationComplete();
                 mBoardAnimatorRunning = false;
                 startAnimator(false);
-                //mAllowFling = true;
                 if(mFlingLocks!=0)mFlingLocks--;
 
                 for(ScoreUpdateListener sul:mScoreUpdateListeners)
                     sul.scoreUpdated(mController.getScore());
-              //  for(AnimationCompleteListener acl:mListeners){
-               //     acl.animationComplete();
-               // }
             }
             @Override
             public void onAnimationCancel(Animator animator) {
@@ -469,7 +458,6 @@ public class GameView extends View
             public void onAnimationRepeat(Animator animator) {
             }
         });
-        //set.start();
         addAnimator(updatesAnimationsSet,true);
 
     }
@@ -498,14 +486,13 @@ public class GameView extends View
             @Override
             public void onAnimationEnd(Animator animator) {
                 mSquares[newRow][column] = rect;
-                // mFallingSquares.remove(removeFallingSquaresIndex);
                 mMoveFromWellToNewRow.removeFirst();
                 invalidate();
                 mController.animationComplete();
                 mBoardAnimators.removeFirst();
                 mBoardAnimatorRunning = false;
                 startAnimator(false);
-                //mAllowFling = true;
+
                 if(mFlingLocks!=0)mFlingLocks--;
 
                 for(FallingSquareAddedListener fsal:mFallingSquareAddedListeners){
@@ -519,7 +506,6 @@ public class GameView extends View
             public void onAnimationRepeat(Animator animator) {
             }
         });
-        //translateYAnimation.start();
         addAnimator(translateYAnimation,false);
     }
 
@@ -783,8 +769,9 @@ public class GameView extends View
             boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 2);
             boolean board = motionEvent1.getY() > getPxLocation(mBoardStartRow - 1);
             float horizontal = motionEvent1.getX() - motionEvent2.getX();
+            float vertical = motionEvent1.getY() - motionEvent2.getY();
 
-            if (well) {
+            if (well && Math.abs(horizontal)>Math.abs(vertical)) {
                 Set<Integer> keySet = mFallingSquares.keySet();
 
                 int direction = horizontal > 0 ? GameBoard.DIRECTION_LEFT : GameBoard.DIRECTION_RIGHT;
@@ -800,7 +787,6 @@ public class GameView extends View
             } else if (mFlingLocks == 0 && board) {
                 mModelUpdating = true;
                 mFlingLocks++;
-                float vertical = motionEvent1.getY() - motionEvent2.getY();
 
                 if (Math.abs(horizontal) > Math.abs(vertical)) {
                     if (horizontal > 0)
