@@ -14,7 +14,7 @@ public class AnimatableRectF extends RectF {
     private Paint mShapeForegroundPaint;
     private Paint mTextPaint;
     private Context mContext;
-    private float mTextSize;
+    //private float mTextSize;
 
     public AnimatableRectF(Context context,float left, float top, float right, float bottom,int squareCornerRadius,int value) {
         super(left, top, right, bottom);
@@ -146,6 +146,6 @@ public class AnimatableRectF extends RectF {
             mTextPaint.setTextSize(mTextPaint.getTextSize()-1);
             textWidth = mTextPaint.measureText("1024");
         }
-        mTextSize = mTextPaint.getTextSize();
+       // mTextSize = mTextPaint.getTextSize();
     }
 }

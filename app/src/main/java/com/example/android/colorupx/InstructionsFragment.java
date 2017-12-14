@@ -172,18 +172,6 @@ public class InstructionsFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("InstructionsFragment","onPause" + " page:" + mPage);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        //mGameView.pause();
-        Log.i("InstructionsFragment","onStop" + " page:" + mPage);
-    }
 
     private void setInstructions(){
         if(mPage==1){

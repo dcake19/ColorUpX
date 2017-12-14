@@ -8,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -44,8 +45,6 @@ public class GameView extends View
     protected int mColumns = 6;
     protected int mBoardStartRow = 9;
     private float mSquareSideLength;
-    //private int mSquareMargin = 8;
-    private int mBackgroundSquareCornerRadius = 24;
     private int mSquareCornerRadius = 0;
     private int mSquareMarginPx;
     private RectF mBackgroundRect;
@@ -99,6 +98,7 @@ public class GameView extends View
     @TargetApi(21)
     public GameView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        setAttributes(context, attrs);
         mScoreUpdateListeners = new ArrayList<>();
         initColors();
         init(context);
@@ -113,6 +113,7 @@ public class GameView extends View
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setAttributes(context, attrs);
         initColors();
         mScoreUpdateListeners = new ArrayList<>();
         init(context);
@@ -120,9 +121,22 @@ public class GameView extends View
 
     public GameView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setAttributes(context, attrs);
         initColors();
         mScoreUpdateListeners = new ArrayList<>();
         init(context);
+    }
+
+    private void setAttributes(Context context, AttributeSet attrs){
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.GameView,
+                0, 0);
+        try {
+            mSquareCornerRadius = a.getDimensionPixelSize(R.styleable.GameView_cornerRadius, 0);
+        } finally {
+            a.recycle();
+        }
     }
 
     private void initColors(){
@@ -228,6 +242,7 @@ public class GameView extends View
                 float xStart = getPxLocation(j);
                 float yStart = getPxLocation(i);
                 mEmptySquares[i][j] = new RectF(xStart,yStart,xStart+mSquareSideLength,yStart+mSquareSideLength);
+
             }
         }
 
@@ -267,13 +282,13 @@ public class GameView extends View
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawRect(mBackgroundRect,mBackgroundPaint);
+        canvas.drawRoundRect(mBackgroundRect,mSquareCornerRadius,mSquareCornerRadius,mBackgroundPaint);
         for(int i=0;i<mEmptySquares.length;i++)
             for(int j=0;j<mEmptySquares[i].length;j++) {
                 if(i>=mBoardStartRow)
-                    canvas.drawRect(mEmptySquares[i][j], mEmptySquarePaint);
+                    canvas.drawRoundRect(mEmptySquares[i][j],mSquareCornerRadius,mSquareCornerRadius, mEmptySquarePaint);
                 else
-                    canvas.drawRect(mEmptySquares[i][j],mBackgroundPaint);
+                    canvas.drawRoundRect(mEmptySquares[i][j],mSquareCornerRadius,mSquareCornerRadius,mBackgroundPaint);
             }
 
         if(mLastDirection == GameBoard.DIRECTION_LEFT || mLastDirection == GameBoard.DIRECTION_UP) {
@@ -311,7 +326,7 @@ public class GameView extends View
                             getPxLocation(i),
                             getPxLocation(j) + mSquareSideLength,
                             getPxLocation(i) + mSquareSideLength,
-                            0,
+                            mSquareCornerRadius,
                             board[i][j]);
         invalidate();
     }
@@ -535,7 +550,7 @@ public class GameView extends View
                 startX, startY,
                 startX + mSquareSideLength,
                 startY + mSquareSideLength,
-                0,value);
+                mSquareCornerRadius,value);
 
         addFallingSquare(position,key,square);
 
