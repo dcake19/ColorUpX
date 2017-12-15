@@ -91,7 +91,7 @@
 
             <ImageButton
                 android:id="@+id/btn_pause"
-                app:srcCompat="@drawable/ic_pause_white_24dp"
+                app:srcCompat="@drawable/ic_pause_white"
                 android:background="@drawable/rounded_corner"
                 android:padding="@dimen/standard_padding"
                 android:layout_gravity="center_vertical"

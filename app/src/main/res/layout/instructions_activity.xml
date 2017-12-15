@@ -22,11 +22,11 @@
 
         <ImageButton
             android:id="@+id/btn_previous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/pause_btn_size"
+            android:layout_height="@dimen/pause_btn_size"
             android:layout_marginLeft="@dimen/standard_margin"
             android:theme="@style/AppTheme.Button"
-            app:srcCompat="@drawable/ic_chevron_left_white_24dp"
+            app:srcCompat="@drawable/ic_left_white"
             android:gravity="left"/>
 
         <TextView
@@ -41,11 +41,11 @@
 
         <ImageButton
             android:id="@+id/btn_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/pause_btn_size"
+            android:layout_height="@dimen/pause_btn_size"
             android:layout_marginRight="@dimen/standard_margin"
             android:theme="@style/AppTheme.Button"
-            app:srcCompat="@drawable/ic_chevron_right_white_24dp"
+            app:srcCompat="@drawable/ic_right_white"
             android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
@@ -55,8 +55,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
     </LinearLayout>
 
 </LinearLayout>

@@ -1,53 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_game_paused"
-    android:background="@color/colorBackground2"
-    android:gravity="center_horizontal"
-    android:padding="@dimen/large_padding"
+    android:id="@+id/nested_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:id="@+id/game_title_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="@dimen/large_padding"
-        android:paddingTop="@dimen/large_padding"
-        android:paddingLeft="@dimen/large_padding"
-        android:textStyle="bold"
+    android:background="@color/colorBackground2">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_game_paused"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="@dimen/text_size_title_large"
-        android:text="2048"/>
+        android:padding="@dimen/large_padding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-    <TextView
-        android:id="@+id/game_title_letters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="@dimen/large_padding"
-        android:paddingBottom="@dimen/large_padding"
-        android:paddingLeft="@dimen/large_padding"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_title"
-        android:text="@string/downfall"/>
+        <TextView
+            android:id="@+id/game_title_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/large_padding"
+            android:paddingTop="@dimen/large_padding"
+            android:paddingLeft="@dimen/large_padding"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_title_large"
+            android:text="2048"/>
 
-    <Button
-        android:id="@+id/btn_play_game"
-        android:theme="@style/AppTheme.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_large"
-        android:text="@string/play_game"/>
+        <TextView
+            android:id="@+id/game_title_letters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/large_padding"
+            android:paddingBottom="@dimen/large_padding"
+            android:paddingLeft="@dimen/large_padding"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_title"
+            android:text="@string/downfall"/>
 
-    <Button
-        android:id="@+id/btn_instructions"
-        android:theme="@style/AppTheme.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_large"
-        android:text="@string/instructions"/>
+        <Button
+            android:id="@+id/btn_play_game"
+            android:theme="@style/AppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            android:layout_marginBottom="@dimen/large_margin"
+            android:text="@string/play_game"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_instructions"
+            android:theme="@style/AppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            android:text="@string/instructions"/>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
