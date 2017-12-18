@@ -41,16 +41,16 @@ public class GameFragment extends Fragment {
     @BindView(R.id.game_paused_title) TextView mGamePausedTitle;
     private SaveGame mSaveGame;
     private HighScore mSavedHighScore;
-    String mGameSize;
+    String mGameType;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Intent intent = getActivity().getIntent();
-        mGameSize = intent.getStringExtra(GameActivity.GAME_SIZE);
-        mSaveGame = new SaveGame(getContext(),mGameSize);
-        mSavedHighScore = new HighScore(getActivity(),mGameSize);
+        mGameType = intent.getStringExtra(GameActivity.GAME_TYPE);
+        mSaveGame = new SaveGame(getContext(),mGameType);
+        mSavedHighScore = new HighScore(getActivity(),mGameType);
 
         View rootview = inflater.inflate(R.layout.game_fragment, container, false);
 
@@ -130,7 +130,7 @@ public class GameFragment extends Fragment {
         }else{
             mButtonStartGame.setVisibility(View.VISIBLE);
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
-            if(mGameSize.equals(GameType.GAME_SIZE_NORMAL))
+            if(mGameType.equals(GameType.GAME_SIZE_NORMAL))
                 mGameView.setParamters(10, 4, 7, 3, 6, 10,
                         maxWidth, maxHeight);
             else
@@ -157,11 +157,14 @@ public class GameFragment extends Fragment {
     @OnClick(R.id.btn_pause)
     public void pause(){
         mGameView.pause();
-
         if(mGameView.isGamePaused()){
             mButtonPause.setEnabled(false);
             mLayoutGamePaused.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void onBackPressed() {
+        mGameView.pause();
     }
 
     @OnClick(R.id.btn_save_game)

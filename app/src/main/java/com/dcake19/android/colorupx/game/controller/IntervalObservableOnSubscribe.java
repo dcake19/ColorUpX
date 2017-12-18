@@ -26,7 +26,6 @@ public class IntervalObservableOnSubscribe implements ObservableOnSubscribe<Inte
 
         long startTime = System.currentTimeMillis();
         while(subscribed.get()){
-
             while (playing.get()) {
                 try {
                     startTime = System.currentTimeMillis() ;

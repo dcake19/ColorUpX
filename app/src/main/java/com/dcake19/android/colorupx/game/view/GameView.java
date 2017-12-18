@@ -333,7 +333,6 @@ public class GameView extends View
     }
 
     public void update(final ArrayList<UpdateSquare> updates, final int[][] updatedBoard, int lastDirection){
-       // Log.v("update","direction: "+lastDirection);
         mLastDirection = lastDirection;
 
         ArrayList<Animator> updateAnimations = new ArrayList<>();
@@ -472,11 +471,6 @@ public class GameView extends View
     }
 
     public void moveFallingSquareToNewRow(final int newRow, final int column,final AnimatableRectF rect){
-        // x translation is used to fix an error that occurs very rarely
-        final ObjectAnimator translateXAnimation =
-                ObjectAnimator.ofFloat(rect,"translationX",
-                        rect.left,getPxLocation(column));
-        translateXAnimation.setDuration(1);
 
         final ObjectAnimator translateYAnimation =
                 ObjectAnimator.ofFloat(rect,"translationY",
@@ -519,10 +513,7 @@ public class GameView extends View
             public void onAnimationRepeat(Animator animator) {
             }
         });
-        AnimatorSet animation = new AnimatorSet();
-        animation.playTogether(translateXAnimation,translateYAnimation);
-        //addAnimator(translateYAnimation,false);
-        addAnimator(animation,false);
+        addAnimator(translateYAnimation,false);
     }
 
     public void moveFallingSquareToNewRow(final int newRow, final int column, final int removeFallingSquaresIndex){
@@ -652,15 +643,19 @@ public class GameView extends View
                 squareAnimation.column != 0) {
             xValue = squareAnimation.rect.left - getPxChange(1);
             squareAnimation.column--;
+            objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
+            objectAnimator.setDuration(mMoveSquareDuration);
+            objectAnimator.start();
         }
         else if(direction == GameBoard.DIRECTION_RIGHT &&
                 squareAnimation.column != mColumns - 1) {
             xValue = squareAnimation.rect.left + getPxChange(1);
             squareAnimation.column++;
+            objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
+            objectAnimator.setDuration(mMoveSquareDuration);
+            objectAnimator.start();
         }
-        objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
-        objectAnimator.setDuration(mMoveSquareDuration);
-        objectAnimator.start();
+
     }
 
     public synchronized void increaseBoard(int column,int removeKey){

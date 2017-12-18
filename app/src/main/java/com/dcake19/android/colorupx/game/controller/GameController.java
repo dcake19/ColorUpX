@@ -22,7 +22,7 @@ public class GameController {
     private GameView mGameView;
     private GameBoard mGameBoard;
     private IntervalObservableOnSubscribe mIntervalObservableOnSubscribe;
-    private int mInterval = 2000;
+    private int mInterval = 3000;
 
     private boolean mSwipeBoardOnResume = false;
     private int mSwipeDirectionOnResume = 0;
