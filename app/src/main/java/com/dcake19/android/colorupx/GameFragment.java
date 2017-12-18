@@ -1,5 +1,6 @@
 package com.dcake19.android.colorupx;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.dcake19.android.colorupx.game.view.GameView;
 import com.dcake19.android.colorupx.saving.SaveGame;
 import com.dcake19.android.colorupx.saving.SaveGameState;
+import com.dcake19.android.colorupx.utils.GameSize;
 import com.dcake19.android.colorupx.utils.TextUtil;
 
 import butterknife.BindView;
@@ -39,13 +41,16 @@ public class GameFragment extends Fragment {
     @BindView(R.id.game_paused_title) TextView mGamePausedTitle;
     private SaveGame mSaveGame;
     private HighScore mSavedHighScore;
+    String mGameSize;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mSaveGame = new SaveGame(getContext());
-        mSavedHighScore = new HighScore(getActivity());
+        Intent intent = getActivity().getIntent();
+        mGameSize = intent.getStringExtra(GameActivity.GAME_SIZE);
+        mSaveGame = new SaveGame(getContext(),mGameSize);
+        mSavedHighScore = new HighScore(getActivity(),mGameSize);
 
         View rootview = inflater.inflate(R.layout.game_fragment, container, false);
 
@@ -115,6 +120,7 @@ public class GameFragment extends Fragment {
         if(saveGameState!=null){
             mButtonStartGame.setVisibility(View.INVISIBLE);
             mLayoutGamePaused.setVisibility(View.VISIBLE);
+            mTextViewScore.setText(String.valueOf(saveGameState.getScore()));
             mGameView.loadGame(saveGameState.getBoard(), saveGameState.getScore(),
                     saveGameState.getBoardStartRow(), saveGameState.getMinBoardRows(),
                     saveGameState.getMaxSquareValue(), saveGameState.getDelay(),
@@ -124,8 +130,13 @@ public class GameFragment extends Fragment {
         }else{
             mButtonStartGame.setVisibility(View.VISIBLE);
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
-            mGameView.setParamters(12,6,9,3,6,10,
-                    maxWidth,maxHeight);
+            if(mGameSize.equals(GameSize.NORMAL))
+                mGameView.setParamters(10, 4, 7, 3, 6, 10,
+                        maxWidth, maxHeight);
+            else
+                mGameView.setParamters(12, 6, 9, 3, 6, 10,
+                        maxWidth, maxHeight);
+
         }
 
         mLayoutGameOver.setVisibility(View.INVISIBLE);
@@ -173,6 +184,7 @@ public class GameFragment extends Fragment {
         mButtonStartGame.setVisibility(View.VISIBLE);
         mLayoutGamePaused.setVisibility(View.INVISIBLE);
         mLayoutGameOver.setVisibility(View.INVISIBLE);
+        mTextViewScore.setText("0");
         mGameView.startNewGame();
     }
 

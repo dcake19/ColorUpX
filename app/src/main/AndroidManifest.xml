@@ -9,19 +9,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.dcake19.android.colorupx.GameActivity"
+            android:name=".GameActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.dcake19.android.colorupx.MainMenuActivity"
+            android:name=".MainMenuActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.dcake19.android.colorupx.InstructionsActivity"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".InstructionsActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

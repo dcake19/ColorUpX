@@ -16,7 +16,8 @@ public class HighScore {
         mHighScore =  mSharedPreferences.getInt(HIGH_SCORE,0);
     }
 
-    public  HighScore(Activity activity){
+    public  HighScore(Activity activity,String gameSize){
+        HIGH_SCORE = gameSize + "_" + HIGH_SCORE;
         mSharedPreferences = activity.getApplicationContext().getSharedPreferences(HIGH_SCORE, Context.MODE_PRIVATE);
         mHighScore =  mSharedPreferences.getInt(HIGH_SCORE,0);
     }

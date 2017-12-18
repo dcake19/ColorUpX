@@ -1,5 +1,7 @@
 package com.dcake19.android.colorupx;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,8 @@ public class GameActivity extends AppCompatActivity {
     private final String FRAGMENT = "Game Fragment";
 
     private GameFragment mFragment;
+
+    protected static final String GAME_SIZE = "game_size";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,12 @@ public class GameActivity extends AppCompatActivity {
             fragmentTransaction.commit();
         }
 
+    }
+
+    public static Intent getIntent(Context context,String gameSize){
+        Intent intent = new Intent(context,GameActivity.class);
+        intent.putExtra(GAME_SIZE,gameSize);
+        return intent;
     }
 
 }

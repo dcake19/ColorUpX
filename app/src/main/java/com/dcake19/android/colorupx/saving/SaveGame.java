@@ -14,9 +14,9 @@ public class SaveGame {
     private Context mContext;
     private String mFileName = "game_state.txt";
 
-    public SaveGame(Context context) {
+    public SaveGame(Context context,String gameSize) {
         mContext = context;
-
+        mFileName = gameSize + "_" + mFileName;
     }
 
     public boolean saveGameToFile(SaveGameState saveGameState){

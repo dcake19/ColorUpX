@@ -41,21 +41,43 @@
             android:text="@string/downfall"/>
 
         <Button
-            android:id="@+id/btn_play_game"
-            android:theme="@style/AppTheme.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_large"
-            android:layout_marginBottom="@dimen/large_margin"
-            android:text="@string/play_game"/>
-
-        <Button
             android:id="@+id/btn_instructions"
             android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_large"
             android:text="@string/instructions"/>
+
+        <TextView
+            android:id="@+id/play_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/large_padding"
+            android:paddingTop="@dimen/large_padding"
+            android:paddingLeft="@dimen/large_padding"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/large_margin"
+            android:textSize="@dimen/text_size_large"
+            android:text="@string/select_game"/>
+
+        <Button
+            android:id="@+id/btn_play_game_normal"
+            android:theme="@style/AppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            android:layout_marginBottom="@dimen/large_margin"
+            android:text="@string/normal"/>
+        <Button
+            android:id="@+id/btn_play_game_large"
+            android:theme="@style/AppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            android:layout_marginBottom="@dimen/large_margin"
+            android:text="@string/large"/>
+
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

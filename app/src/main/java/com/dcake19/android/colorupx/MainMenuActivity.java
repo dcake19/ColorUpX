@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dcake19.android.colorupx.utils.GameSize;
 import com.dcake19.android.colorupx.utils.TextUtil;
 
 import butterknife.BindView;
@@ -16,7 +17,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @BindView(R.id.game_title_number) TextView mTextViewTitleNumber;
     @BindView(R.id.game_title_letters) TextView mTextViewTitleLetters;
-    @BindView(R.id.btn_play_game) Button mButtonPlayGame;
+    @BindView(R.id.play_game) TextView mTextViewPlayGame;
+    @BindView(R.id.btn_play_game_normal) Button mButtonPlayGameNormal;
+    @BindView(R.id.btn_play_game_large) Button mButtonPlayGameLarge;
     @BindView(R.id.btn_instructions) Button mButtonInstructions;
 
     @Override
@@ -30,15 +33,13 @@ public class MainMenuActivity extends AppCompatActivity {
     private void setTextColors(){
         mTextViewTitleNumber.setText(TextUtil.getMultiColorString(this,"2048"));
         mTextViewTitleLetters.setText(TextUtil.getMultiColorString(this,getString(R.string.downfall),4));
-        mButtonPlayGame.setAllCaps(false);
-        mButtonPlayGame.setText(TextUtil.getMultiColorString(this,getString(R.string.play_game)));
         mButtonInstructions.setAllCaps(false);
         mButtonInstructions.setText(TextUtil.getMultiColorString(this,getString(R.string.instructions)));
-    }
-
-    @OnClick(R.id.btn_play_game)
-    public void play(){
-        startActivity(new Intent(this,GameActivity.class));
+        mTextViewPlayGame.setText(TextUtil.getMultiColorString(this,getString(R.string.select_game)));
+        mButtonPlayGameNormal.setAllCaps(false);
+        mButtonPlayGameNormal.setText(TextUtil.getMultiColorString(this,getString(R.string.normal)));
+        mButtonPlayGameLarge.setAllCaps(false);
+        mButtonPlayGameLarge.setText(TextUtil.getMultiColorString(this,getString(R.string.large)));
     }
 
     @OnClick(R.id.btn_instructions)
@@ -46,5 +47,14 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(new Intent(this,InstructionsActivity.class));
     }
 
+    @OnClick(R.id.btn_play_game_normal)
+    public void playNormal(){
+        startActivity(GameActivity.getIntent(this, GameSize.NORMAL));
+    }
+
+    @OnClick(R.id.btn_play_game_large)
+    public void playLarge(){
+        startActivity(GameActivity.getIntent(this, GameSize.LARGE));
+    }
 
 }

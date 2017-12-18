@@ -166,6 +166,7 @@ public class GameView extends View
         mBoardStartRow = boardStartRow;
         setDimensions();
         mGamePaused = true;
+        mFallSquareDuration = 6000/mRows;
         mController = new GameController(this,rows,columns,boardStartRow,minBoardRows,intialSquares,maxSquareValue,0);
         invalidate();
     }
@@ -673,7 +674,7 @@ public class GameView extends View
         mSquares[mBoardStartRow][column] = rect;
         changeFallingSquaresYTranslation();
         invalidate();
-        if(mFlingLocks!=0)mFlingLocks--;
+        if(mFlingLocks!=0) mFlingLocks--;
         for(FallingSquareAddedListener fsal:mFallingSquareAddedListeners){
             fsal.squareAdded(column);
         }
@@ -946,7 +947,7 @@ public class GameView extends View
         mMoveFromWellToNewRow.clear();
         mBoardAnimators.clear();
         mLastDirection = 0;
-        mBoardStartRow = 9;
+        mBoardStartRow = mRows-3;
         mController.stopFallingSquares();
         mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,6,10,0);
         invalidate();
