@@ -36,9 +36,14 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("GameActivity","onResume");
-       // FragmentManager fm = getSupportFragmentManager();
-       // mFragment = (GameFragment) fm.findFragmentByTag(FRAGMENT);
-        mFragment = null;
+        FragmentManager fm = getSupportFragmentManager();
+        mFragment = (GameFragment) fm.findFragmentByTag(FRAGMENT);
+        if(mFragment != null){
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(mFragment);
+            fragmentTransaction.commit();
+            mFragment = null;
+        }
         if(mFragment ==null) {
             mFragment = new GameFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -51,8 +56,10 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+       // mFragment.stopGame();
         super.onPause();
-        mFragment.pause();
+        //mFragment.pause();
+
         Log.i("GameActivity","onPause");
     }
 

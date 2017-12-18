@@ -174,11 +174,17 @@ public class GameView extends View
     public void loadGame(int[][] board,int score,int boardStartRow,int minBoardRows,int maxSquareValue,long delay,
                          SavedAnimatableRectF[] savedRects,int direction,SavedAnimatableRectF addSquareFromWell,
                          SavedFallingSquare[] fallingSquares,int maxWidth,int maxHeight){
+
+        mFallingSquares.clear();
+        mMoveFromWellToNewRow.clear();
+        mBoardAnimators.clear();
+
         mMaxWidth = maxWidth;
         mMaxHeight = maxHeight;
         mRows = board.length;
         mColumns = board[0].length;
         mBoardStartRow = boardStartRow;
+        mFallSquareDuration = 6000/mRows;
         setDimensions();
 
         mGamePaused = true;
@@ -915,6 +921,12 @@ public class GameView extends View
                 mFallingSquares.get(i).animator.pause();
             }
         }
+    }
+
+    public void stop(){
+        mController.stop();
+        //mFallingSquares.clear();
+        //mMoveFromWellToNewRow.clear();
     }
 
     public void resume(){

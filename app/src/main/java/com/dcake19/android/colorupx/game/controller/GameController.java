@@ -59,6 +59,10 @@ public class GameController {
         mIntervalObservableOnSubscribe.pause();
     }
 
+    public void stop(){
+        mIntervalObservableOnSubscribe.stop();
+    }
+
     public void resume(){
         mIntervalObservableOnSubscribe.resume();
 

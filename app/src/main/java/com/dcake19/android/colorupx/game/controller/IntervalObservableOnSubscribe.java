@@ -53,7 +53,7 @@ public class IntervalObservableOnSubscribe implements ObservableOnSubscribe<Inte
 
     public void stop() {
         subscribed.set(false);
-        thread.interrupt();
+        if(thread!=null) thread.interrupt();
     }
 
     public long getRemaining() {

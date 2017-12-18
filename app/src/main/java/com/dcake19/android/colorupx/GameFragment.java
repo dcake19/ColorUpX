@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class GameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.i("GameFragment","onCreateView");
         Intent intent = getActivity().getIntent();
         mGameType = intent.getStringExtra(GameActivity.GAME_TYPE);
         mSaveGame = new SaveGame(getContext(),mGameType);
@@ -83,10 +84,26 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onStart() {
+        Log.i("GameFragment","onStart");
         super.onStart();
         setTextColors();
         loadGame();
     }
+
+    @Override
+    public void onPause() {
+        stopGame();
+        Log.i("GameFragment","onPause");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.i("GameFragment","onStop");
+        super.onStop();
+    }
+
+
 
     private void setTextColors(){
         mButtonStartGame.setAllCaps(false);
@@ -163,8 +180,17 @@ public class GameFragment extends Fragment {
         }
     }
 
+    public void stopGame(){
+        mGameView.pause();
+        saveGame();
+        mGameView.stop();
+       // mGameView = null;
+    }
+
     public void onBackPressed() {
         mGameView.pause();
+        saveGame();
+        mGameView.stop();
     }
 
     @OnClick(R.id.btn_save_game)
