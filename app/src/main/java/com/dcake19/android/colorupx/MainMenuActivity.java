@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.dcake19.android.colorupx.utils.GameSize;
+import com.dcake19.android.colorupx.utils.GameType;
 import com.dcake19.android.colorupx.utils.TextUtil;
 
 import butterknife.BindView;
@@ -49,12 +49,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_play_game_normal)
     public void playNormal(){
-        startActivity(GameActivity.getIntent(this, GameSize.NORMAL));
+        startActivity(GameActivity.getIntent(this, GameType.GAME_SIZE_NORMAL));
     }
 
     @OnClick(R.id.btn_play_game_large)
     public void playLarge(){
-        startActivity(GameActivity.getIntent(this, GameSize.LARGE));
+        startActivity(GameActivity.getIntent(this, GameType.GAME_SIZE_LARGE));
     }
 
 }

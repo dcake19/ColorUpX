@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.dcake19.android.colorupx.game.view.GameView;
 import com.dcake19.android.colorupx.saving.SaveGame;
 import com.dcake19.android.colorupx.saving.SaveGameState;
-import com.dcake19.android.colorupx.utils.GameSize;
+import com.dcake19.android.colorupx.utils.GameType;
 import com.dcake19.android.colorupx.utils.TextUtil;
 
 import butterknife.BindView;
@@ -130,7 +130,7 @@ public class GameFragment extends Fragment {
         }else{
             mButtonStartGame.setVisibility(View.VISIBLE);
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
-            if(mGameSize.equals(GameSize.NORMAL))
+            if(mGameSize.equals(GameType.GAME_SIZE_NORMAL))
                 mGameView.setParamters(10, 4, 7, 3, 6, 10,
                         maxWidth, maxHeight);
             else
