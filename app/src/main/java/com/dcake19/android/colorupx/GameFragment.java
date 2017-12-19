@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.dcake19.android.colorupx.game.view.GameView;
 import com.dcake19.android.colorupx.saving.SaveGame;
 import com.dcake19.android.colorupx.saving.SaveGameState;
+import com.dcake19.android.colorupx.saving.SavedAnimatableRectF;
 import com.dcake19.android.colorupx.utils.GameType;
 import com.dcake19.android.colorupx.utils.TextUtil;
 
@@ -82,9 +83,10 @@ public class GameFragment extends Fragment {
         return rootview;
     }
 
+
+
     @Override
     public void onStart() {
-        Log.i("GameFragment","onStart");
         super.onStart();
         setTextColors();
         loadGame();
@@ -92,17 +94,11 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onPause() {
-        stopGame();
-        Log.i("GameFragment","onPause");
+        mGameView.pause();
+        saveGame();
+        mGameView.stop();
         super.onPause();
     }
-
-    @Override
-    public void onStop() {
-        Log.i("GameFragment","onStop");
-        super.onStop();
-    }
-
 
 
     private void setTextColors(){
@@ -180,22 +176,15 @@ public class GameFragment extends Fragment {
         }
     }
 
-    public void stopGame(){
-        mGameView.pause();
-        saveGame();
-        mGameView.stop();
-       // mGameView = null;
-    }
-
-    public void onBackPressed() {
-        mGameView.pause();
-        saveGame();
-        mGameView.stop();
-    }
-
     @OnClick(R.id.btn_save_game)
     public void saveGame(){
         mGameView.getFallingSquares();
+        SavedAnimatableRectF[] s = mGameView.getCurrentBoardPosition();
+
+        for(SavedAnimatableRectF rect:s){
+            Log.i("Saved rect","i: " + rect.iCoord + ", j: " + rect.jCoord +
+                    ", top: " + rect.top + ", left: " + rect.left);
+        }
 
         SaveGameState saveGameState = new SaveGameState(
                 mGameView.getViewBoard(),mGameView.getScore(),

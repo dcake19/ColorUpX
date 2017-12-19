@@ -51,8 +51,8 @@ public class GameView extends View
     private Paint mEmptySquarePaint;
     private RectF[][] mEmptySquares;
     private AnimatableRectF[][] mSquares;
-    private int mFallSquareDuration = 500;
-    private int mMoveSquareDuration = 100;
+    private int mFallSquareDuration = 5000;
+    private int mMoveSquareDuration = 1000;
     private int mMergeAnimationDuration = 200;
     private int mBackgroundColor;
     private int mEmptySquareColor;
@@ -166,7 +166,7 @@ public class GameView extends View
         mBoardStartRow = boardStartRow;
         setDimensions();
         mGamePaused = true;
-        mFallSquareDuration = 6000/mRows;
+       // mFallSquareDuration = 6000/mRows;
         mController = new GameController(this,rows,columns,boardStartRow,minBoardRows,intialSquares,maxSquareValue,0);
         invalidate();
     }
@@ -555,7 +555,6 @@ public class GameView extends View
     }
 
     public void addFallingSquare(int column,int key,AnimatableRectF square){
-      //  Log.v("addFallingSquare2", "column: "+column+ " value: "+square.getValue() + " key: "+key);
         float startX = square.left;
         float endX = getPxLocation(column);
 
@@ -563,7 +562,9 @@ public class GameView extends View
                 ObjectAnimator.ofFloat(square,"translationX",
                         startX,endX);
         if(startX != endX){
-            translateXAnimation.setDuration(mMoveSquareDuration);
+            float distancePx = Math.abs(startX-endX);
+            int distanceSquares = Math.round(distancePx/mSquareSideLength);
+            translateXAnimation.setDuration(distanceSquares*mMoveSquareDuration/mColumns);
             translateXAnimation.setInterpolator(new LinearInterpolator());
         }
 
@@ -925,8 +926,6 @@ public class GameView extends View
 
     public void stop(){
         mController.stop();
-        //mFallingSquares.clear();
-        //mMoveFromWellToNewRow.clear();
     }
 
     public void resume(){

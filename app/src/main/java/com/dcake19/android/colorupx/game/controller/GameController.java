@@ -22,8 +22,7 @@ public class GameController {
     private GameView mGameView;
     private GameBoard mGameBoard;
     private IntervalObservableOnSubscribe mIntervalObservableOnSubscribe;
-    private int mInterval = 3000;
-
+    private int mInterval = 1000;
     private boolean mSwipeBoardOnResume = false;
     private int mSwipeDirectionOnResume = 0;
     private boolean mAddFromWellOnResume = false;
@@ -112,7 +111,6 @@ public class GameController {
         mObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(consumer);
-
     }
 
     public synchronized void swipe(int direction) {

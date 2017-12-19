@@ -20,22 +20,17 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_activity);
-        Log.i("GameActivity","onCreate");
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("GameActivity","onStart");
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("GameActivity","onResume");
         FragmentManager fm = getSupportFragmentManager();
         mFragment = (GameFragment) fm.findFragmentByTag(FRAGMENT);
         if(mFragment != null){
@@ -56,26 +51,17 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-       // mFragment.stopGame();
         super.onPause();
-        //mFragment.pause();
-
-        Log.i("GameActivity","onPause");
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(mFragment);
+        fragmentTransaction.commit();
+        mFragment = null;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("GameActivity","onStop");
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mFragment.onBackPressed();
-    }
-
-
 
     public static Intent getIntent(Context context, String gameSize){
         Intent intent = new Intent(context,GameActivity.class);
