@@ -9,7 +9,7 @@ import android.graphics.RectF;
 public class AnimatableRectF extends RectF {
 
     private Integer mValue = 1;
-    private Integer mMaxValue = 10;
+    private Integer mMaxValue = 11;
     private int mSquareCornerRadius;
     private Paint mShapeForegroundPaint;
     private Paint mTextPaint;
@@ -46,7 +46,7 @@ public class AnimatableRectF extends RectF {
         else{
             color = mContext.getResources().getColor(
                     mContext.getResources().getIdentifier(
-                            "colorSquare10", "color", mContext.getPackageName()));
+                            "colorSquare11", "color", mContext.getPackageName()));
         }
 
         mShapeForegroundPaint.setColor(color);
@@ -107,7 +107,7 @@ public class AnimatableRectF extends RectF {
     }
 
     public void incrementValue(){
-        mValue++;
+        if(mValue<mMaxValue) mValue++;
         setColor();
     }
 
@@ -126,11 +126,11 @@ public class AnimatableRectF extends RectF {
     }
 
     private void setTextSize(){
-        float textWidth = mTextPaint.measureText("1024");
+        float textWidth = Math.max(mTextPaint.measureText("1024"),mTextPaint.measureText("2048"));
         float squareWidth = right-left;
         while(textWidth>0.9*squareWidth){
             mTextPaint.setTextSize(mTextPaint.getTextSize()-1);
-            textWidth = mTextPaint.measureText("1024");
+            textWidth = Math.max(mTextPaint.measureText("1024"),mTextPaint.measureText("2048"));
         }
     }
 }

@@ -22,7 +22,9 @@ public class GameController {
     private GameView mGameView;
     private GameBoard mGameBoard;
     private IntervalObservableOnSubscribe mIntervalObservableOnSubscribe;
-    private int mInterval = 1000;
+    //private int mInterval = 1250;
+    private int mInitialInterval = 3000;
+    private int mMinInterval = 2000;
     private boolean mSwipeBoardOnResume = false;
     private int mSwipeDirectionOnResume = 0;
     private boolean mAddFromWellOnResume = false;
@@ -90,7 +92,7 @@ public class GameController {
 
     private void addFallingSquares(long remaining){
 
-        mIntervalObservableOnSubscribe = new IntervalObservableOnSubscribe(mInterval,false,remaining);
+        mIntervalObservableOnSubscribe = new IntervalObservableOnSubscribe(mInitialInterval,false,remaining);
 
         Observable<FallingSquare> mObservable = Observable
                 .create(mIntervalObservableOnSubscribe)
@@ -119,6 +121,7 @@ public class GameController {
         ArrayList<UpdateSquare> updates = mGameBoard.getUpdates(direction);
 
         if(updates.size()>0) {
+            mIntervalObservableOnSubscribe.setInterval(Math.max(mMinInterval,mInitialInterval - mGameBoard.getScore()));
             mGameView.update(updates,mGameBoard.getBoard(),mGameBoard.getLastDirection());
             mGameView.setWellRows(mGameBoard.getWellRows());
         }else{

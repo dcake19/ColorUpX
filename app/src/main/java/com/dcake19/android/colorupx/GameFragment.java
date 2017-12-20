@@ -144,10 +144,10 @@ public class GameFragment extends Fragment {
             mButtonStartGame.setVisibility(View.VISIBLE);
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
             if(mGameType.equals(GameType.GAME_SIZE_NORMAL))
-                mGameView.setParamters(10, 4, 7, 3, 6, 10,
+                mGameView.setParamters(10, 4, 7, 3, 8, 11,
                         maxWidth, maxHeight);
             else
-                mGameView.setParamters(12, 6, 9, 3, 6, 10,
+                mGameView.setParamters(12, 6, 9, 3, 8, 11,
                         maxWidth, maxHeight);
 
         }

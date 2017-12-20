@@ -59,4 +59,8 @@ public class IntervalObservableOnSubscribe implements ObservableOnSubscribe<Inte
     public long getRemaining() {
         return remaining;
     }
+
+    public void setInterval(int interval){
+        this.interval = interval;
+    }
 }

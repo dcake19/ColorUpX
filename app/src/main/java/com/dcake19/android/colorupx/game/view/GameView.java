@@ -51,8 +51,8 @@ public class GameView extends View
     private Paint mEmptySquarePaint;
     private RectF[][] mEmptySquares;
     private AnimatableRectF[][] mSquares;
-    private int mFallSquareDuration = 5000;
-    private int mMoveSquareDuration = 1000;
+    private int mFallSquareDuration = 500;
+    private int mMoveSquareDuration = 100;
     private int mMergeAnimationDuration = 200;
     private int mBackgroundColor;
     private int mEmptySquareColor;
@@ -970,7 +970,7 @@ public class GameView extends View
         mLastDirection = 0;
         mBoardStartRow = mRows-3;
         mController.stopFallingSquares();
-        mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,6,10,0);
+        mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,8,11,0);
         invalidate();
     }
 

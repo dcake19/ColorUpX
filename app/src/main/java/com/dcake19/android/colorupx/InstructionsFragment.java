@@ -110,7 +110,7 @@ public class InstructionsFragment extends Fragment {
         int maxHeight = metrics.heightPixels/2;
         if(mPage<3) {
             int[][] board = {{0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0},
-                    {3, 8, 0, 8, 0, 3}, {2, 9, 4, 0, 0, 0}, {5, 10, 0, 2, 6, 0}};
+                    {3, 9, 0, 9, 0, 3}, {2, 10, 4, 0, 0, 0}, {5, 11, 0, 2, 6, 0}};
             mGameView.setBoardDemo(board, maxWidth, maxHeight);
         }
         else{
