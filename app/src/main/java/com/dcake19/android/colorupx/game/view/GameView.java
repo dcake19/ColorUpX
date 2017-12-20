@@ -166,7 +166,7 @@ public class GameView extends View
         mBoardStartRow = boardStartRow;
         setDimensions();
         mGamePaused = true;
-       // mFallSquareDuration = 6000/mRows;
+        setFallSquareDuration();
         mController = new GameController(this,rows,columns,boardStartRow,minBoardRows,intialSquares,maxSquareValue,0);
         invalidate();
     }
@@ -184,7 +184,7 @@ public class GameView extends View
         mRows = board.length;
         mColumns = board[0].length;
         mBoardStartRow = boardStartRow;
-        mFallSquareDuration = 6000/mRows;
+        setFallSquareDuration();
         setDimensions();
 
         mGamePaused = true;
@@ -220,6 +220,10 @@ public class GameView extends View
         }
 
         invalidate();
+    }
+
+    private void setFallSquareDuration(){
+       mFallSquareDuration = 6000/mRows;
     }
 
     protected void setDimensions(){
@@ -477,6 +481,11 @@ public class GameView extends View
     }
 
     public void moveFallingSquareToNewRow(final int newRow, final int column,final AnimatableRectF rect){
+        // code should be obsolete but could potentially correct any squares in the wrong column
+        final ObjectAnimator translateXAnimation =
+                ObjectAnimator.ofFloat(rect,"translationX",
+                        rect.left,getPxLocation(column));
+        translateXAnimation.setDuration(1);
 
         final ObjectAnimator translateYAnimation =
                 ObjectAnimator.ofFloat(rect,"translationY",
@@ -519,7 +528,10 @@ public class GameView extends View
             public void onAnimationRepeat(Animator animator) {
             }
         });
-        addAnimator(translateYAnimation,false);
+        AnimatorSet animation = new AnimatorSet();
+        animation.playTogether(translateXAnimation,translateYAnimation);
+        //addAnimator(translateYAnimation,false);
+        addAnimator(animation,false);
     }
 
     public void moveFallingSquareToNewRow(final int newRow, final int column, final int removeFallingSquaresIndex){
@@ -648,7 +660,8 @@ public class GameView extends View
 
         if(direction == GameBoard.DIRECTION_LEFT &&
                 squareAnimation.column != 0) {
-            xValue = squareAnimation.rect.left - getPxChange(1);
+            //xValue = squareAnimation.rect.left - getPxChange(1);
+            xValue = getPxLocation(squareAnimation.column-1);
             squareAnimation.column--;
             objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
             objectAnimator.setDuration(mMoveSquareDuration);
@@ -656,7 +669,8 @@ public class GameView extends View
         }
         else if(direction == GameBoard.DIRECTION_RIGHT &&
                 squareAnimation.column != mColumns - 1) {
-            xValue = squareAnimation.rect.left + getPxChange(1);
+            //xValue = squareAnimation.rect.left + getPxChange(1);
+            xValue = getPxLocation(squareAnimation.column+1);
             squareAnimation.column++;
             objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
             objectAnimator.setDuration(mMoveSquareDuration);
@@ -747,8 +761,8 @@ public class GameView extends View
 
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
-        if(!mGamePaused && motionEvent.getY() < getPxLocation(mBoardStartRow-2)) {
-
+        //if(!mGamePaused && motionEvent.getY() < getPxLocation(mBoardStartRow-2)) {
+        if(!mGamePaused && motionEvent.getY() < getPxLocation(mBoardStartRow-1)) {
             Set<Integer> keySet = mFallingSquares.keySet();
             for (Integer i : keySet) {
                 AnimatableRectF rect = mFallingSquares.get(i).rect;
@@ -783,7 +797,8 @@ public class GameView extends View
     public boolean onFling(MotionEvent motionEvent1, MotionEvent motionEvent2, float velocityX, float velocityY) {
         if(!mGamePaused) {
             // true if the fling is in the well, false if in the board
-            boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 2);
+            //boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 2);
+            boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 1);
             boolean board = motionEvent1.getY() > getPxLocation(mBoardStartRow - 1);
             float horizontal = motionEvent1.getX() - motionEvent2.getX();
             float vertical = motionEvent1.getY() - motionEvent2.getY();
