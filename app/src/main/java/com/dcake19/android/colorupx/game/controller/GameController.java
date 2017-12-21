@@ -2,6 +2,7 @@ package com.dcake19.android.colorupx.game.controller;
 
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.dcake19.android.colorupx.game.view.AnimatableRectF;
 import com.dcake19.android.colorupx.game.view.GameView;
@@ -23,37 +24,52 @@ public class GameController {
     private GameBoard mGameBoard;
     private IntervalObservableOnSubscribe mIntervalObservableOnSubscribe;
     //private int mInterval = 1250;
-    private int mInitialInterval = 3000;
+    private int mInitialInterval = 5000;
     private int mMinInterval = 2000;
+    private int mLevelUpScore = 10;
+    private int mLevel = 1;
     private boolean mSwipeBoardOnResume = false;
     private int mSwipeDirectionOnResume = 0;
     private boolean mAddFromWellOnResume = false;
     private AddSquareToWell mAddSquareToWellOnResume;
 
     public GameController(GameView gameView,int rows,int columns,int boardStartRow,
-                          int minBoardRows,int intialSquares,int maxSquareValue,int delay) {
+                          int minBoardRows,int intialSquares,int maxSquareValue,int delay,
+                          int initialInterval,int minInterval,int levelUpScore) {
         mGameView = gameView;
         mGameBoard = new GameBoard(rows,columns,boardStartRow,minBoardRows,maxSquareValue);
-
         mGameBoard.createRandomBoard(intialSquares);
         mGameView.setBoard(mGameBoard.getBoard());
         addFallingSquares(delay);
+        mInitialInterval = initialInterval;
+        mMinInterval = minInterval;
+        mLevelUpScore = levelUpScore;
     }
 
     // constructor for loading
     public GameController(GameView gameView,int[][] board,int score,int boardStartRow,
-                          int minBoardRows,int maxSquareValue,long delay,boolean displayBoard) {
+                          int minBoardRows,int maxSquareValue,long delay,boolean displayBoard,
+                          int initialInterval,int minInterval,int levelUpScore) {
         mGameView = gameView;
         mGameBoard = new GameBoard(board,score,boardStartRow,minBoardRows,maxSquareValue);
         if(displayBoard) mGameView.setBoard(mGameBoard.getBoard());
         addFallingSquares(delay);
+        mInitialInterval = initialInterval;
+        mMinInterval = minInterval;
+        mLevelUpScore = levelUpScore;
+        mLevel = (int) mGameBoard.getScore() / (mLevelUpScore) + 1;
+       // mGameBoard.increaseMaxSquareValue(mLevel-1);
     }
 
     public GameController(GameView gameView,int[][] board,int score,int boardStartRow,
-                          int minBoardRows,int maxSquareValue,boolean displayBoard) {
+                          int minBoardRows,int maxSquareValue,boolean displayBoard,
+                          int initialInterval,int minInterval,int levelUpScore) {
         mGameView = gameView;
         mGameBoard = new GameBoard(board,score,boardStartRow,minBoardRows,maxSquareValue);
         if(displayBoard) mGameView.setBoard(mGameBoard.getBoard());
+        mInitialInterval = initialInterval;
+        mMinInterval = minInterval;
+        mLevelUpScore = levelUpScore;
     }
 
     public void pause(){
@@ -77,7 +93,6 @@ public class GameController {
                     mAddSquareToWellOnResume.value,
                     mAddSquareToWellOnResume.rect);
         }
-
     }
 
     public void swipeOnResumeAfterLoad(int direction){
@@ -92,7 +107,7 @@ public class GameController {
 
     private void addFallingSquares(long remaining){
 
-        mIntervalObservableOnSubscribe = new IntervalObservableOnSubscribe(mInitialInterval,false,remaining);
+        mIntervalObservableOnSubscribe = new IntervalObservableOnSubscribe(getCurrentInterval(),false,remaining);
 
         Observable<FallingSquare> mObservable = Observable
                 .create(mIntervalObservableOnSubscribe)
@@ -121,13 +136,39 @@ public class GameController {
         ArrayList<UpdateSquare> updates = mGameBoard.getUpdates(direction);
 
         if(updates.size()>0) {
-            mIntervalObservableOnSubscribe.setInterval(Math.max(mMinInterval,mInitialInterval - mGameBoard.getScore()));
+            mIntervalObservableOnSubscribe.setInterval(
+                   getCurrentInterval());
+            displayBoard();
             mGameView.update(updates,mGameBoard.getBoard(),mGameBoard.getLastDirection());
             mGameView.setWellRows(mGameBoard.getWellRows());
+            if(mGameBoard.getScore()/mLevelUpScore >= mLevel) {
+                setLevel();
+                mGameView.newLevel(getMaxSquarevalue());
+            }
         }else{
             mGameView.modelFinishedUpdating();
             mGameView.allowFling();
         }
+    }
+
+    private void displayBoard(){
+        Log.i("GameController","Game Board");
+        String board = "";
+        for(int i=0;i<mGameBoard.getBoard().length;i++) {
+            for (int j = 0; j < mGameBoard.getBoard()[i].length; j++) {
+                board += mGameBoard.getBoard()[i][j];
+                if (j != mGameBoard.getBoard()[i].length - 1) board += ",";
+            }
+            board += "\n";
+        }
+        Log.i("",board);
+    }
+
+    private void setLevel(){
+       // Log.i("GameController","Score: " + mGameBoard.getScore()+ " N")
+        int level = (int) mGameBoard.getScore() / (mLevelUpScore) + 1;
+        mGameBoard.increaseMaxSquareValue(level - mLevel);
+        mLevel = level;
     }
 
     private synchronized void addSquareFromWell(int column,int value,AnimatableRectF rect){
@@ -168,6 +209,12 @@ public class GameController {
         mIntervalObservableOnSubscribe.stop();
     }
 
+    private int getCurrentInterval(){
+        int coefficient = (mInitialInterval-mMinInterval)/mLevelUpScore;
+        int modScore = mGameBoard.getScore()%mLevelUpScore;
+        return mInitialInterval - coefficient*modScore;
+    }
+
     public int getScore(){
         return mGameBoard.getScore();
     }
@@ -178,6 +225,18 @@ public class GameController {
 
     public int getMaxSquarevalue(){
         return mGameBoard.getMaxSquareValue();
+    }
+
+    public int getLevelUpScore() {
+        return mLevelUpScore;
+    }
+
+    public int getMinInterval() {
+        return mMinInterval;
+    }
+
+    public int getInitialInterval() {
+        return mInitialInterval;
     }
 
     public long getRemainingTimeForDelay(){

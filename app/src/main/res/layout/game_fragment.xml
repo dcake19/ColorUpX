@@ -114,6 +114,7 @@
             <include layout="@layout/game_start"/>
             <include layout="@layout/game_paused"/>
             <include layout="@layout/game_over"/>
+            <include layout="@layout/game_win"/>
         </FrameLayout>
 
     </LinearLayout>

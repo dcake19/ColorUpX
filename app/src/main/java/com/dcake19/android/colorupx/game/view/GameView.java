@@ -66,9 +66,22 @@ public class GameView extends View
     private boolean mModelUpdating = false;
     protected boolean mGamePaused = false;
 
+    public void printMaxSquareValues(){
+        for(int i=0;i<mSquares.length;i++)
+            for(int j=0;j<mSquares[i].length;j++)
+                if(mSquares[i][j]!=null) Log.i("Square",i+", "+j + " value: " + mSquares[i][j].getValue() + " max value: " + mSquares[i][j].mMaxValue);
+
+        for(AnimatableRectF rect:mMoveFromWellToNewRow)
+            Log.i("Move well to row","value: " + rect.getValue() + " max value: " + rect.mMaxValue);
+
+        for(Integer i:mFallingSquares.keySet())
+            Log.i("Falling squares","value: " + mFallingSquares.get(i).rect.getValue() + " max value: " + mFallingSquares.get(i).rect.mMaxValue);
+    }
+
     List<ScoreUpdateListener> mScoreUpdateListeners;
     List<GameOverListener> mGameOverListeners = new ArrayList<>();
     List<FallingSquareAddedListener> mFallingSquareAddedListeners = new ArrayList<>();
+    List<NewLevelListener> mNewLevelListeners = new ArrayList<>();
 
     public void addScoreUpdateListener(ScoreUpdateListener listener){
         mScoreUpdateListeners.add(listener);
@@ -92,6 +105,14 @@ public class GameView extends View
 
     public interface FallingSquareAddedListener{
         void squareAdded(int column);
+    }
+
+    public void addNewLevelListener(NewLevelListener listener){
+        mNewLevelListeners.add(listener);
+    }
+
+    public interface NewLevelListener{
+        void newLevel(int maxValue);
     }
 
     @TargetApi(21)
@@ -158,7 +179,9 @@ public class GameView extends View
         mFallingSquares = new Hashtable<>();
     }
 
-    public void setParamters(int rows,int columns,int boardStartRow,int minBoardRows,int intialSquares,int maxSquareValue,int maxWidth,int maxHeight){
+    public void setParamters(int rows,int columns,int boardStartRow,int minBoardRows,int intialSquares,
+                             int maxSquareValue,int maxWidth,int maxHeight,
+                             int initialInterval,int minInterval,int levelUpScore){
         mMaxWidth = maxWidth;
         mMaxHeight = maxHeight;
         mRows = rows;
@@ -167,13 +190,15 @@ public class GameView extends View
         setDimensions();
         mGamePaused = true;
         setFallSquareDuration();
-        mController = new GameController(this,rows,columns,boardStartRow,minBoardRows,intialSquares,maxSquareValue,0);
+        mController = new GameController(this,rows,columns,boardStartRow,minBoardRows,
+                intialSquares,maxSquareValue,0,initialInterval,minInterval,levelUpScore);
         invalidate();
     }
 
     public void loadGame(int[][] board,int score,int boardStartRow,int minBoardRows,int maxSquareValue,long delay,
                          SavedAnimatableRectF[] savedRects,int direction,SavedAnimatableRectF addSquareFromWell,
-                         SavedFallingSquare[] fallingSquares,int maxWidth,int maxHeight){
+                         SavedFallingSquare[] fallingSquares,int maxWidth,int maxHeight,
+                         int initialInterval,int minInterval,int levelUpScore){
 
         mFallingSquares.clear();
         mMoveFromWellToNewRow.clear();
@@ -188,14 +213,16 @@ public class GameView extends View
         setDimensions();
 
         mGamePaused = true;
-
-        mController = new GameController(this, board, score, boardStartRow, minBoardRows, maxSquareValue, delay, !(savedRects!=null && direction>0));
+        Log.i("GameView","Load Max value: " + maxSquareValue);
+        mController = new GameController(this, board, score, boardStartRow, minBoardRows, maxSquareValue,
+                delay, !(savedRects!=null && direction>0),initialInterval,minInterval,levelUpScore);
 
         if(savedRects!=null && direction>0){
             for(SavedAnimatableRectF sarf:savedRects){
                 mSquares[sarf.iCoord][sarf.jCoord] = new AnimatableRectF(getContext(),
                         sarf.left,sarf.top,sarf.left+mSquareSideLength,
                         sarf.top+mSquareSideLength, mSquareCornerRadius,sarf.value);
+               // mSquares[sarf.iCoord][sarf.jCoord].setMaxValue(maxSquareValue);
             }
             mFlingLocks++;
             mController.swipeOnResumeAfterLoad(direction);
@@ -205,7 +232,8 @@ public class GameView extends View
             AnimatableRectF rect = new AnimatableRectF(getContext(),
                     addSquareFromWell.left, addSquareFromWell.top, addSquareFromWell.left + mSquareSideLength,
                     addSquareFromWell.top + mSquareSideLength, mSquareCornerRadius, addSquareFromWell.value);
-                mMoveFromWellToNewRow.add(rect);
+           // rect.setMaxValue(maxSquareValue);
+            mMoveFromWellToNewRow.add(rect);
             mFlingLocks++;
             mController.addFromWellOnResumeAfterLoad(addSquareFromWell.jCoord, addSquareFromWell.value, rect);
         }
@@ -213,11 +241,15 @@ public class GameView extends View
         if(fallingSquares!=null){
             int key = 10000;
             for(SavedFallingSquare sfs:fallingSquares){
-                addFallingSquare(sfs.column,key++,new AnimatableRectF(getContext(),
+                AnimatableRectF rect = new AnimatableRectF(getContext(),
                         sfs.left, sfs.top, sfs.left + mSquareSideLength,
-                        sfs.top + mSquareSideLength, mSquareCornerRadius,sfs.value));
+                        sfs.top + mSquareSideLength, mSquareCornerRadius,sfs.value);
+                //rect.setMaxValue(maxSquareValue);
+                addFallingSquare(sfs.column,key++,rect);
             }
         }
+        updateMaxValues();
+        printMaxSquareValues();
 
         invalidate();
     }
@@ -561,7 +593,7 @@ public class GameView extends View
                 startX + mSquareSideLength,
                 startY + mSquareSideLength,
                 mSquareCornerRadius,value);
-
+        square.setMaxValue(mController.getMaxSquarevalue());
         addFallingSquare(position,key,square);
 
     }
@@ -660,7 +692,6 @@ public class GameView extends View
 
         if(direction == GameBoard.DIRECTION_LEFT &&
                 squareAnimation.column != 0) {
-            //xValue = squareAnimation.rect.left - getPxChange(1);
             xValue = getPxLocation(squareAnimation.column-1);
             squareAnimation.column--;
             objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
@@ -669,7 +700,6 @@ public class GameView extends View
         }
         else if(direction == GameBoard.DIRECTION_RIGHT &&
                 squareAnimation.column != mColumns - 1) {
-            //xValue = squareAnimation.rect.left + getPxChange(1);
             xValue = getPxLocation(squareAnimation.column+1);
             squareAnimation.column++;
             objectAnimator.setFloatValues(squareAnimation.rect.left,xValue);
@@ -733,7 +763,6 @@ public class GameView extends View
         }
 
         mBoardAnimatorRunning = false;
-
     }
 
     public void allowFling(){
@@ -742,6 +771,31 @@ public class GameView extends View
 
     public void modelFinishedUpdating(){
         mModelUpdating = false;
+    }
+
+    public void newLevel(int maxValue){
+        pause();
+        for (NewLevelListener nll:mNewLevelListeners)
+            nll.newLevel(maxValue);
+    }
+
+    public void playNextLevel(){
+        updateMaxValues();
+        Log.i("GameView","Max values");
+        printMaxSquareValues();
+        resume();
+    }
+
+    private void updateMaxValues(){
+        for(int i=0;i<mSquares.length;i++)
+            for(int j=0;j<mSquares[i].length;j++)
+                if(mSquares[i][j]!=null) mSquares[i][j].setMaxValue(mController.getMaxSquarevalue());
+
+        for(AnimatableRectF rect:mMoveFromWellToNewRow)
+            rect.setMaxValue(mController.getMaxSquarevalue());
+
+        for(Integer i:mFallingSquares.keySet())
+            mFallingSquares.get(i).rect.setMaxValue(mController.getMaxSquarevalue());
     }
 
     @Override
@@ -761,7 +815,6 @@ public class GameView extends View
 
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
-        //if(!mGamePaused && motionEvent.getY() < getPxLocation(mBoardStartRow-2)) {
         if(!mGamePaused && motionEvent.getY() < getPxLocation(mBoardStartRow-1)) {
             Set<Integer> keySet = mFallingSquares.keySet();
             for (Integer i : keySet) {
@@ -896,6 +949,18 @@ public class GameView extends View
         return mBoardAnimators.size() > mMoveFromWellToNewRow.size() ? mLastDirection : 0;
     }
 
+    public int getLevelUpScore() {
+        return mController.getLevelUpScore();
+    }
+
+    public int getMinInterval() {
+        return mController.getMinInterval();
+    }
+
+    public int getInitialInterval() {
+        return mController.getInitialInterval();
+    }
+
     public SavedAnimatableRectF getMoveFromWellToNewRow(){
         if( mMoveFromWellToNewRow.size() == 0)
             return null;
@@ -970,7 +1035,8 @@ public class GameView extends View
         mLastDirection = 0;
         mBoardStartRow = mRows-3;
         mController.stopFallingSquares();
-        mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,8,11,0);
+        mController = new GameController(this,mRows,mColumns,mBoardStartRow,3,8,11,0,
+                mController.getInitialInterval(),mController.getMinInterval(),mController.getLevelUpScore());
         invalidate();
     }
 

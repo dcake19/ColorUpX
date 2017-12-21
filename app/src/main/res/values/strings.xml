@@ -16,6 +16,10 @@
     <string name="play_game">PLAY GAME</string>
     <string name="instructions">INSTRUCTIONS</string>
 
+    <string name="you_win">YOU WIN!</string>
+    <string name="play">PLAY</string>
+    <string name="next_level">NEXT LEVEL:</string>
+
     <string name="select_game">SELECT GAME</string>
     <string name="normal">NORMAL</string>
     <string name="large">LARGE</string>

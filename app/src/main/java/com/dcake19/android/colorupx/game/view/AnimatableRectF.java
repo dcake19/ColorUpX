@@ -9,7 +9,8 @@ import android.graphics.RectF;
 public class AnimatableRectF extends RectF {
 
     private Integer mValue = 1;
-    private Integer mMaxValue = 11;
+    Integer mMaxValue = 11;
+    private final int mMaxValueColor = 11;
     private int mSquareCornerRadius;
     private Paint mShapeForegroundPaint;
     private Paint mTextPaint;
@@ -30,15 +31,13 @@ public class AnimatableRectF extends RectF {
         mTextPaint.setTextSize(textSize);
         setTextSize();
         mTextPaint.setTextAlign(Paint.Align.CENTER);
-
         setColor();
     }
 
     private void setColor(){
-
         int color;
 
-        if(mValue<=mMaxValue) {
+        if(mValue<=mMaxValueColor) {
             color = mContext.getResources().getColor(
                     mContext.getResources().getIdentifier(
                             "colorSquare" + mValue, "color", mContext.getPackageName()));
@@ -61,7 +60,7 @@ public class AnimatableRectF extends RectF {
     }
 
     public int getNextColor(){
-        int nextValue = mValue<mMaxValue ? mValue+1:mMaxValue;
+        int nextValue = mValue<mMaxValueColor ? mValue+1:mMaxValueColor;
         int color = mContext.getResources().getColor(
                 mContext.getResources().getIdentifier(
                         "colorSquare"+ nextValue, "color", mContext.getPackageName()));
@@ -107,8 +106,13 @@ public class AnimatableRectF extends RectF {
     }
 
     public void incrementValue(){
-        if(mValue<mMaxValue) mValue++;
+        if(mValue<mMaxValue)
+            mValue++;
         setColor();
+    }
+
+    public void setMaxValue(int maxValue){
+        mMaxValue = maxValue;
     }
 
     public Paint getShapeForegroundPaint() {
@@ -117,6 +121,7 @@ public class AnimatableRectF extends RectF {
 
     public void drawToCanvas(Canvas canvas){
         canvas.drawRoundRect(this,mSquareCornerRadius,mSquareCornerRadius,mShapeForegroundPaint);
+        if(mValue > mMaxValueColor) setNewTextSize();
         canvas.drawText(getText(),(right+left)/2,(bottom+top)/2 + mTextPaint.getTextSize()*3/8,mTextPaint);
     }
 
@@ -126,11 +131,19 @@ public class AnimatableRectF extends RectF {
     }
 
     private void setTextSize(){
-        float textWidth = Math.max(mTextPaint.measureText("1024"),mTextPaint.measureText("2048"));
+        float textWidth = Math.max(mTextPaint.measureText("1024"), mTextPaint.measureText("2048"));
+        float squareWidth = right - left;
+        while (textWidth > 0.9 * squareWidth) {mTextPaint.setTextSize(mTextPaint.getTextSize() - 1);
+            textWidth = Math.max(mTextPaint.measureText("1024"), mTextPaint.measureText("2048"));
+        }
+    }
+
+    private void setNewTextSize(){
+        float textWidth = mTextPaint.measureText(getText());
         float squareWidth = right-left;
         while(textWidth>0.9*squareWidth){
             mTextPaint.setTextSize(mTextPaint.getTextSize()-1);
-            textWidth = Math.max(mTextPaint.measureText("1024"),mTextPaint.measureText("2048"));
+            textWidth = mTextPaint.measureText(getText());
         }
     }
 }

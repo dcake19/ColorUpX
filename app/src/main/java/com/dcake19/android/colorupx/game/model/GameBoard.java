@@ -1,5 +1,7 @@
 package com.dcake19.android.colorupx.game.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -16,7 +18,7 @@ public class GameBoard {
     private int mLastDirection = 0;
     private int mScore = 0;
     private boolean mGameOver = false;
-    private int mMaxSquareValue = 10;
+    private int mMaxSquareValue = 11;
 
 
     public GameBoard(int rows,int columns,int wellRows,int minBoardRows,int maxSquareValue) {
@@ -58,6 +60,11 @@ public class GameBoard {
 
     public int[][] getBoard() {
         return board;
+    }
+
+    public void increaseMaxSquareValue(int increase){
+        mMaxSquareValue += increase;
+        Log.i("GameBoard","Max value: " + mMaxSquareValue);
     }
 
     public int getWellRows(){

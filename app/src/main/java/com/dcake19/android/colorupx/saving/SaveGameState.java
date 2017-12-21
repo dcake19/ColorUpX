@@ -12,13 +12,17 @@ public class SaveGameState implements Serializable {
     private int direction = 0;
     private SavedAnimatableRectF addSquareFromWell;
     private SavedFallingSquare[] savedFallingSquares;
+    private int initialInterval;
+    private int minInterval;
+    private int levelUpScore;
 
     public SaveGameState(int[][] board,int score, int boardStartRow,
                          int minBoardRows, int maxSquareValue, long delay,
                          SavedAnimatableRectF[] currentBoardPosition,
                          int direction,
                          SavedAnimatableRectF addSquareFromWell,
-                         SavedFallingSquare[] savedFallingSquares) {
+                         SavedFallingSquare[] savedFallingSquares,
+                         int initialInterval,int minInterval,int levelUpScore) {
         this.board = board;
         this.score = score;
         this.boardStartRow = boardStartRow;
@@ -29,6 +33,9 @@ public class SaveGameState implements Serializable {
         this.direction = direction;
         this.addSquareFromWell = addSquareFromWell;
         this.savedFallingSquares = savedFallingSquares;
+        this.initialInterval = initialInterval;
+        this.minInterval = minInterval;
+        this.levelUpScore = levelUpScore;
     }
 
     public int getScore() {
@@ -69,5 +76,17 @@ public class SaveGameState implements Serializable {
 
     public SavedFallingSquare[] getSavedFallingSquare() {
         return savedFallingSquares;
+    }
+
+    public int getInitialInterval() {
+        return initialInterval;
+    }
+
+    public int getLevelUpScore() {
+        return levelUpScore;
+    }
+
+    public int getMinInterval() {
+        return minInterval;
     }
 }

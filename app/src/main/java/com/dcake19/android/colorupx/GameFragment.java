@@ -34,6 +34,7 @@ public class GameFragment extends Fragment {
     @BindView(R.id.btn_pause) ImageButton mButtonPause;
     @BindView(R.id.layout_game_paused) LinearLayout mLayoutGamePaused;
     @BindView(R.id.layout_game_over) LinearLayout mLayoutGameOver;
+    @BindView(R.id.layout_game_win) LinearLayout mLayoutGameWin;
     @BindView(R.id.btn_start) Button mButtonStartGame;
     @BindView(R.id.btn_resume) Button mButtonResume;
     @BindView(R.id.btn_save_game) Button mButtonSaveGame;
@@ -41,6 +42,8 @@ public class GameFragment extends Fragment {
     @BindView(R.id.btn_start_new_game) Button mButtonStartNewGame;
     @BindView(R.id.game_over_title) TextView mGameOverTitle;
     @BindView(R.id.game_paused_title) TextView mGamePausedTitle;
+    @BindView(R.id.btn_play) Button mButtonPlay;
+    @BindView(R.id.next_level_name) TextView mTextViewNextLevel;
     private SaveGame mSaveGame;
     private HighScore mSavedHighScore;
     String mGameType;
@@ -48,7 +51,6 @@ public class GameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("GameFragment","onCreateView");
         Intent intent = getActivity().getIntent();
         mGameType = intent.getStringExtra(GameActivity.GAME_TYPE);
         mSaveGame = new SaveGame(getContext(),mGameType);
@@ -77,6 +79,17 @@ public class GameFragment extends Fragment {
                 mButtonStartGame.setVisibility(View.INVISIBLE);
                 mLayoutGamePaused.setVisibility(View.INVISIBLE);
                 mLayoutGameOver.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mGameView.addNewLevelListener(new GameView.NewLevelListener() {
+            @Override
+            public void newLevel(int maxValue) {
+                mButtonPause.setEnabled(false);
+                Log.i("GameFragment","Max values");
+                mGameView.printMaxSquareValues();
+                mTextViewNextLevel.setText(String.valueOf((int) Math.pow(2,maxValue)));
+                mLayoutGameWin.setVisibility(View.VISIBLE);
             }
         });
 
@@ -133,22 +146,25 @@ public class GameFragment extends Fragment {
         if(saveGameState!=null){
             mButtonStartGame.setVisibility(View.INVISIBLE);
             mLayoutGamePaused.setVisibility(View.VISIBLE);
+            mLayoutGameWin.setVisibility(View.INVISIBLE);
             mTextViewScore.setText(String.valueOf(saveGameState.getScore()));
             mGameView.loadGame(saveGameState.getBoard(), saveGameState.getScore(),
                     saveGameState.getBoardStartRow(), saveGameState.getMinBoardRows(),
                     saveGameState.getMaxSquareValue(), saveGameState.getDelay(),
                     saveGameState.getCurrentBoardPosition(), saveGameState.getDirection(),
                     saveGameState.getAddSquareFromWell(),saveGameState.getSavedFallingSquare(),
-                    maxWidth,maxHeight);
+                    maxWidth,maxHeight,saveGameState.getInitialInterval(),
+                    saveGameState.getMinInterval(),saveGameState.getLevelUpScore());
         }else{
             mButtonStartGame.setVisibility(View.VISIBLE);
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
+            mLayoutGameWin.setVisibility(View.INVISIBLE);
             if(mGameType.equals(GameType.GAME_SIZE_NORMAL))
-                mGameView.setParamters(10, 4, 7, 3, 8, 11,
-                        maxWidth, maxHeight);
+                mGameView.setParamters(8, 4, 5, 3, 8, 11,
+                        maxWidth, maxHeight,5000,2000,10);
             else
-                mGameView.setParamters(12, 6, 9, 3, 8, 11,
-                        maxWidth, maxHeight);
+                mGameView.setParamters(10, 6, 7, 3, 8, 11,
+                        maxWidth, maxHeight,5000,2000,10);
 
         }
 
@@ -179,12 +195,6 @@ public class GameFragment extends Fragment {
     @OnClick(R.id.btn_save_game)
     public void saveGame(){
         mGameView.getFallingSquares();
-        SavedAnimatableRectF[] s = mGameView.getCurrentBoardPosition();
-
-        for(SavedAnimatableRectF rect:s){
-            Log.i("Saved rect","i: " + rect.iCoord + ", j: " + rect.jCoord +
-                    ", top: " + rect.top + ", left: " + rect.left);
-        }
 
         SaveGameState saveGameState = new SaveGameState(
                 mGameView.getViewBoard(),mGameView.getScore(),
@@ -193,7 +203,10 @@ public class GameFragment extends Fragment {
                 mGameView.getCurrentBoardPosition(),
                 mGameView.getDirection(),
                 mGameView.getMoveFromWellToNewRow(),
-                mGameView.getFallingSquares());
+                mGameView.getFallingSquares(),
+                mGameView.getInitialInterval(),
+                mGameView.getMinInterval(),
+                mGameView.getLevelUpScore());
         mSaveGame.saveGameToFile(saveGameState);
     }
 
@@ -204,6 +217,13 @@ public class GameFragment extends Fragment {
         mLayoutGameOver.setVisibility(View.INVISIBLE);
         mTextViewScore.setText("0");
         mGameView.startNewGame();
+    }
+
+    @OnClick(R.id.btn_play)
+    public void play(){
+        mLayoutGameWin.setVisibility(View.INVISIBLE);
+        mButtonPause.setEnabled(true);
+        mGameView.playNextLevel();
     }
 
 }
