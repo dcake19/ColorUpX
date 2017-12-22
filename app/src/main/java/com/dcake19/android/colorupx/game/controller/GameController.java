@@ -58,7 +58,6 @@ public class GameController {
         mMinInterval = minInterval;
         mLevelUpScore = levelUpScore;
         mLevel = (int) mGameBoard.getScore() / (mLevelUpScore) + 1;
-       // mGameBoard.increaseMaxSquareValue(mLevel-1);
     }
 
     public GameController(GameView gameView,int[][] board,int score,int boardStartRow,

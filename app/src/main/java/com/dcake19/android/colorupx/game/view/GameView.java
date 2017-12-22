@@ -1,6 +1,5 @@
 package com.dcake19.android.colorupx.game.view;
 
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;

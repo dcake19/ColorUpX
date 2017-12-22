@@ -37,7 +37,6 @@ public class GameFragment extends Fragment {
     @BindView(R.id.layout_game_win) LinearLayout mLayoutGameWin;
     @BindView(R.id.btn_start) Button mButtonStartGame;
     @BindView(R.id.btn_resume) Button mButtonResume;
-    @BindView(R.id.btn_save_game) Button mButtonSaveGame;
     @BindView(R.id.btn_new_game) Button mButtonNewGame;
     @BindView(R.id.btn_start_new_game) Button mButtonStartNewGame;
     @BindView(R.id.game_over_title) TextView mGameOverTitle;
@@ -139,8 +138,6 @@ public class GameFragment extends Fragment {
         mGamePausedTitle.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.game_paused)));
         mButtonResume.setAllCaps(false);
         mButtonResume.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.resume)));
-        mButtonSaveGame.setAllCaps(false);
-        mButtonSaveGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.save_game)));
         mButtonNewGame.setAllCaps(false);
         mButtonNewGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.new_game)));
         mGameOverTitle.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.game_over)));
@@ -187,7 +184,6 @@ public class GameFragment extends Fragment {
             else
                 mGameView.setParamters(10, 6, 7, 3, 8, 11,
                         maxWidth, maxHeight,5000,2000,1);
-
         }
 
         mLayoutGameOver.setVisibility(View.INVISIBLE);
@@ -214,7 +210,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.btn_save_game)
     public void saveGame(){
         mGameView.getFallingSquares();
 
