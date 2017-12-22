@@ -112,7 +112,6 @@ public class GameFragment extends Fragment {
         super.onPause();
     }
 
-
     public String getValueAsString(int value){
         if(value<20) {
             Integer text = (int) Math.pow(2, value);
