@@ -65,6 +65,8 @@ public class GameView extends View
     private boolean mBoardAnimatorRunning = false;
     private boolean mModelUpdating = false;
     protected boolean mGamePaused = false;
+    // true if it is time for the next level
+    private boolean mNextLevel = false;
 
     public void printMaxSquareValues(){
         for(int i=0;i<mSquares.length;i++)
@@ -500,6 +502,10 @@ public class GameView extends View
 
                 for(ScoreUpdateListener sul:mScoreUpdateListeners)
                     sul.scoreUpdated(mController.getScore());
+
+                if(mNextLevel)
+                    alertNextLevel();
+
             }
             @Override
             public void onAnimationCancel(Animator animator) {
@@ -773,19 +779,6 @@ public class GameView extends View
         mModelUpdating = false;
     }
 
-    public void newLevel(int maxValue){
-        pause();
-        for (NewLevelListener nll:mNewLevelListeners)
-            nll.newLevel(maxValue);
-    }
-
-    public void playNextLevel(){
-        updateMaxValues();
-        Log.i("GameView","Max values");
-        printMaxSquareValues();
-        resume();
-    }
-
     private void updateMaxValues(){
         for(int i=0;i<mSquares.length;i++)
             for(int j=0;j<mSquares[i].length;j++)
@@ -887,6 +880,27 @@ public class GameView extends View
             }
         }
         return true;
+    }
+
+    public void newLevel(int maxValue){
+        mNextLevel = true;
+//        pause();
+//        for (NewLevelListener nll:mNewLevelListeners)
+//            nll.newLevel(maxValue);
+    }
+
+    private void alertNextLevel(){
+        mNextLevel = false;
+        pause();
+        for (NewLevelListener nll:mNewLevelListeners)
+            nll.newLevel(mController.getMaxSquarevalue());
+    }
+
+    public void playNextLevel(){
+        updateMaxValues();
+        Log.i("GameView","Max values");
+        printMaxSquareValues();
+        resume();
     }
 
     public int[][] getViewBoard(){

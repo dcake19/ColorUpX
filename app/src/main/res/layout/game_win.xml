@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:gravity="center"
+        android:textColor="@color/colorSquare11"
         android:textSize="@dimen/text_size_large"
         android:text="@string/next_level"/>
 
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:gravity="center"
+        android:textColor="@color/colorSquare11"
         android:textSize="@dimen/text_size_title"
         tools:text="4096"/>
 

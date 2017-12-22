@@ -42,6 +42,7 @@ public class GameFragment extends Fragment {
     @BindView(R.id.btn_start_new_game) Button mButtonStartNewGame;
     @BindView(R.id.game_over_title) TextView mGameOverTitle;
     @BindView(R.id.game_paused_title) TextView mGamePausedTitle;
+    @BindView(R.id.you_win_title) TextView mTextViewYouWin;
     @BindView(R.id.btn_play) Button mButtonPlay;
     @BindView(R.id.next_level_name) TextView mTextViewNextLevel;
     private SaveGame mSaveGame;
@@ -88,15 +89,13 @@ public class GameFragment extends Fragment {
                 mButtonPause.setEnabled(false);
                 Log.i("GameFragment","Max values");
                 mGameView.printMaxSquareValues();
-                mTextViewNextLevel.setText(String.valueOf((int) Math.pow(2,maxValue)));
+                mTextViewNextLevel.setText(getValueAsString(maxValue));
                 mLayoutGameWin.setVisibility(View.VISIBLE);
             }
         });
 
         return rootview;
     }
-
-
 
     @Override
     public void onStart() {
@@ -114,6 +113,27 @@ public class GameFragment extends Fragment {
     }
 
 
+    public String getValueAsString(int value){
+        if(value<20) {
+            Integer text = (int) Math.pow(2, value);
+            return text.toString();
+        }else if(value<30){
+            Integer text = (int) Math.pow(2, value-20);
+            return text.toString() + "M";
+        }else if(value<40){
+            Integer text = (int) Math.pow(2, value-30);
+            return text.toString() + "B";
+        }else if(value<50){
+            Integer text = (int) Math.pow(2, value-40);
+            return text.toString() + "T";
+        }else if(value<60){
+            Integer text = (int) Math.pow(2, value-50);
+            return text.toString() + "Q";
+        }else {
+            return "E"+ value;
+        }
+    }
+
     private void setTextColors(){
         mButtonStartGame.setAllCaps(false);
         mButtonStartGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.start_game)));
@@ -127,6 +147,9 @@ public class GameFragment extends Fragment {
         mGameOverTitle.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.game_over)));
         mButtonStartNewGame.setAllCaps(false);
         mButtonStartNewGame.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.new_game)));
+        mTextViewYouWin.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.you_win)));
+        mButtonPlay.setAllCaps(false);
+        mButtonPlay.setText(TextUtil.getMultiColorString(getContext(),getString(R.string.play)));
     }
 
     private void loadGame(){
@@ -164,7 +187,7 @@ public class GameFragment extends Fragment {
                         maxWidth, maxHeight,5000,2000,10);
             else
                 mGameView.setParamters(10, 6, 7, 3, 8, 11,
-                        maxWidth, maxHeight,5000,2000,10);
+                        maxWidth, maxHeight,5000,2000,1);
 
         }
 

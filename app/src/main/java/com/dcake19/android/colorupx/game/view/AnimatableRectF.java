@@ -126,8 +126,24 @@ public class AnimatableRectF extends RectF {
     }
 
     private String getText(){
-        Integer text = (int) Math.pow(2,mValue);
-        return text.toString();
+        if(mValue<20) {
+            Integer text = (int) Math.pow(2, mValue);
+            return text.toString();
+        }else if(mValue<30){
+            Integer text = (int) Math.pow(2, mValue-20);
+            return text.toString() + "M";
+        }else if(mValue<40){
+            Integer text = (int) Math.pow(2, mValue-30);
+            return text.toString() + "B";
+        }else if(mValue<50){
+            Integer text = (int) Math.pow(2, mValue-40);
+            return text.toString() + "T";
+        }else if(mValue<60){
+            Integer text = (int) Math.pow(2, mValue-50);
+            return text.toString() + "Q";
+        }else {
+            return "E"+mValue;
+        }
     }
 
     private void setTextSize(){

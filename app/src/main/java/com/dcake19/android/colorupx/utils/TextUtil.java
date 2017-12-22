@@ -54,4 +54,6 @@ public class TextUtil {
     private static int getApi23LetterColor(Context context,int colorId){
         return context.getColor(colorId);
     }
+
+
 }
