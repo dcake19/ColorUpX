@@ -201,15 +201,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.btn_pause)
-    public void pause(){
-        mGameView.pause();
-        if(mGameView.isGamePaused()){
-            mButtonPause.setEnabled(false);
-            mLayoutGamePaused.setVisibility(View.VISIBLE);
-        }
-    }
-
     public void saveGame(){
         mGameView.getFallingSquares();
 
@@ -225,6 +216,15 @@ public class GameFragment extends Fragment {
                 mGameView.getMinInterval(),
                 mGameView.getLevelUpScore());
         mSaveGame.saveGameToFile(saveGameState);
+    }
+
+    @OnClick(R.id.btn_pause)
+    public void pause(){
+        mGameView.pause();
+        if(mGameView.isGamePaused()){
+            mButtonPause.setEnabled(false);
+            mLayoutGamePaused.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick({R.id.btn_new_game,R.id.btn_start_new_game})
