@@ -14,7 +14,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,18 +65,6 @@ public class GameView extends View
     protected boolean mGamePaused = false;
     // true if it is time for the next level
     private boolean mNextLevel = false;
-
-    public void printMaxSquareValues(){
-        for(int i=0;i<mSquares.length;i++)
-            for(int j=0;j<mSquares[i].length;j++)
-                if(mSquares[i][j]!=null) Log.i("Square",i+", "+j + " value: " + mSquares[i][j].getValue() + " max value: " + mSquares[i][j].mMaxValue);
-
-        for(AnimatableRectF rect:mMoveFromWellToNewRow)
-            Log.i("Move well to row","value: " + rect.getValue() + " max value: " + rect.mMaxValue);
-
-        for(Integer i:mFallingSquares.keySet())
-            Log.i("Falling squares","value: " + mFallingSquares.get(i).rect.getValue() + " max value: " + mFallingSquares.get(i).rect.mMaxValue);
-    }
 
     List<ScoreUpdateListener> mScoreUpdateListeners;
     List<GameOverListener> mGameOverListeners = new ArrayList<>();
@@ -214,7 +201,6 @@ public class GameView extends View
         setDimensions();
 
         mGamePaused = true;
-        Log.i("GameView","Load Max value: " + maxSquareValue);
         mController = new GameController(this, board, score, boardStartRow, minBoardRows, maxSquareValue,
                 delay, !(savedRects!=null && direction>0),initialInterval,minInterval,levelUpScore);
 
@@ -223,7 +209,6 @@ public class GameView extends View
                 mSquares[sarf.iCoord][sarf.jCoord] = new AnimatableRectF(getContext(),
                         sarf.left,sarf.top,sarf.left+mSquareSideLength,
                         sarf.top+mSquareSideLength, mSquareCornerRadius,sarf.value);
-               // mSquares[sarf.iCoord][sarf.jCoord].setMaxValue(maxSquareValue);
             }
             mFlingLocks++;
             mController.swipeOnResumeAfterLoad(direction);
@@ -233,7 +218,6 @@ public class GameView extends View
             AnimatableRectF rect = new AnimatableRectF(getContext(),
                     addSquareFromWell.left, addSquareFromWell.top, addSquareFromWell.left + mSquareSideLength,
                     addSquareFromWell.top + mSquareSideLength, mSquareCornerRadius, addSquareFromWell.value);
-           // rect.setMaxValue(maxSquareValue);
             mMoveFromWellToNewRow.add(rect);
             mFlingLocks++;
             mController.addFromWellOnResumeAfterLoad(addSquareFromWell.jCoord, addSquareFromWell.value, rect);
@@ -245,12 +229,10 @@ public class GameView extends View
                 AnimatableRectF rect = new AnimatableRectF(getContext(),
                         sfs.left, sfs.top, sfs.left + mSquareSideLength,
                         sfs.top + mSquareSideLength, mSquareCornerRadius,sfs.value);
-                //rect.setMaxValue(maxSquareValue);
                 addFallingSquare(sfs.column,key++,rect);
             }
         }
         updateMaxValues();
-        printMaxSquareValues();
 
         invalidate();
     }
@@ -285,7 +267,6 @@ public class GameView extends View
                 float xStart = getPxLocation(j);
                 float yStart = getPxLocation(i);
                 mEmptySquares[i][j] = new RectF(xStart,yStart,xStart+mSquareSideLength,yStart+mSquareSideLength);
-
             }
         }
 
@@ -297,10 +278,6 @@ public class GameView extends View
 
     public float getPxLocation(int count){
         return 2*mSquareMarginPx+(mSquareMarginPx+mSquareSideLength)*count;
-    }
-
-    private float getPxChange(int change){
-        return (mSquareMarginPx+mSquareSideLength)*change;
     }
 
     private int getIndexFromPxLocation(float pxLocation){
@@ -354,10 +331,10 @@ public class GameView extends View
         setMeasuredDimension((int)(mBackgroundRect.right+mSquareMarginPx),(int)(mBackgroundRect.bottom+mSquareMarginPx));
     }
 
-    public void setBoard(int[][] board){
+    public void setBoard(int[][] board,int maxSquareValue){
         for(int i=0;i<board.length;i++)
             for(int j=0;j<board[i].length;j++)
-                if(board[i][j]!=0)
+                if(board[i][j]!=0) {
                     mSquares[i][j] = new AnimatableRectF(
                             getContext(),
                             getPxLocation(j),
@@ -366,6 +343,8 @@ public class GameView extends View
                             getPxLocation(i) + mSquareSideLength,
                             mSquareCornerRadius,
                             board[i][j]);
+                    mSquares[i][j].setMaxValue(maxSquareValue);
+                }
         invalidate();
     }
 
@@ -375,7 +354,7 @@ public class GameView extends View
         }
     }
 
-    public void update(final ArrayList<UpdateSquare> updates, final int[][] updatedBoard, int lastDirection){
+    public synchronized void update(final ArrayList<UpdateSquare> updates, final int[][] updatedBoard, int lastDirection){
         mLastDirection = lastDirection;
 
         ArrayList<Animator> updateAnimations = new ArrayList<>();
@@ -517,7 +496,7 @@ public class GameView extends View
 
     }
 
-    public void moveFallingSquareToNewRow(final int newRow, final int column,final AnimatableRectF rect){
+    public synchronized void moveFallingSquareToNewRow(final int newRow, final int column,final AnimatableRectF rect){
         // code should be obsolete but could potentially correct any squares in the wrong column
         final ObjectAnimator translateXAnimation =
                 ObjectAnimator.ofFloat(rect,"translationX",
@@ -571,7 +550,7 @@ public class GameView extends View
         addAnimator(animation,false);
     }
 
-    public void moveFallingSquareToNewRow(final int newRow, final int column, final int removeFallingSquaresIndex){
+    public synchronized void moveFallingSquareToNewRow(final int newRow, final int column, final int removeFallingSquaresIndex){
         SquareAnimation squareAnimation = mFallingSquares.remove(removeFallingSquaresIndex);
         mMoveFromWellToNewRow.add(squareAnimation.rect);
         moveFallingSquareToNewRow(newRow, column, squareAnimation.rect);
@@ -588,7 +567,7 @@ public class GameView extends View
             if(!mBoardAnimators.getFirst().isStarted()) mBoardAnimators.getFirst().start();
     }
 
-    public void addFallingSquare(int position,int value,int key){
+    public synchronized void addFallingSquare(int position,int value,int key){
        // Log.v("addFallingSquare1", "position: "+position+ " value: "+value + " key: "+key);
         float startX = getPxLocation(position);
         float startY = getPxLocation(-1) - mSquareMarginPx;
@@ -600,10 +579,9 @@ public class GameView extends View
                 mSquareCornerRadius,value);
         square.setMaxValue(mController.getMaxSquarevalue());
         addFallingSquare(position,key,square);
-
     }
 
-    public void addFallingSquare(int column,int key,AnimatableRectF square){
+    public synchronized void addFallingSquare(int column,int key,AnimatableRectF square){
         float startX = square.left;
         float endX = getPxLocation(column);
 
@@ -621,7 +599,7 @@ public class GameView extends View
                 ObjectAnimator.ofFloat(square,"translationY",
                         square.top,getPxLocation(mBoardStartRow-1));
 
-        float distancePx = getPxLocation(mBoardStartRow-1) - square.top;
+        final float distancePx = getPxLocation(mBoardStartRow-1) - square.top;
 
         int distanceSquares = Math.round(distancePx/mSquareSideLength);
         translateYAnimation.setDuration(mFallSquareDuration*distanceSquares);
@@ -639,7 +617,6 @@ public class GameView extends View
         animation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
             }
 
             @Override
@@ -669,7 +646,7 @@ public class GameView extends View
         if(!mGamePaused)animation.start();
     }
 
-    protected void swipeSquare(int direction,SquareAnimation squareAnimation){
+    protected synchronized void swipeSquare(int direction,SquareAnimation squareAnimation){
 
         ArrayList<Animator> animators = squareAnimation.animator.getChildAnimations();
         ObjectAnimator objectAnimator = (ObjectAnimator) animators.get(0);
@@ -690,7 +667,7 @@ public class GameView extends View
         objectAnimator.start();
     }
 
-    protected void tapSquare(int direction,SquareAnimation squareAnimation){
+    protected synchronized void tapSquare(int direction,SquareAnimation squareAnimation){
         ArrayList<Animator> animators = squareAnimation.animator.getChildAnimations();
         ObjectAnimator objectAnimator = (ObjectAnimator) animators.get(0);
         float xValue = 0;
@@ -731,7 +708,7 @@ public class GameView extends View
         }
     }
 
-    public void setWellRows(int wellRows){
+    public synchronized void setWellRows(int wellRows){
         if(wellRows!=mBoardStartRow) {
             mBoardStartRow = wellRows;
             changeFallingSquaresYTranslation();
@@ -739,7 +716,7 @@ public class GameView extends View
         }
     }
 
-    private void changeFallingSquaresYTranslation(){
+    private synchronized void changeFallingSquaresYTranslation(){
         Set<Integer> keySet = mFallingSquares.keySet();
 
         for(Integer i:keySet){
@@ -770,11 +747,11 @@ public class GameView extends View
         mBoardAnimatorRunning = false;
     }
 
-    public void allowFling(){
+    public synchronized void allowFling(){
         if(mFlingLocks!=0)mFlingLocks--;
     }
 
-    public void modelFinishedUpdating(){
+    public synchronized void modelFinishedUpdating(){
         mModelUpdating = false;
     }
 
@@ -842,7 +819,6 @@ public class GameView extends View
     public boolean onFling(MotionEvent motionEvent1, MotionEvent motionEvent2, float velocityX, float velocityY) {
         if(!mGamePaused) {
             // true if the fling is in the well, false if in the board
-            //boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 2);
             boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 1);
             boolean board = motionEvent1.getY() > getPxLocation(mBoardStartRow - 1);
             float horizontal = motionEvent1.getX() - motionEvent2.getX();
@@ -881,11 +857,8 @@ public class GameView extends View
         return true;
     }
 
-    public void newLevel(int maxValue){
+    public void newLevel(){
         mNextLevel = true;
-//        pause();
-//        for (NewLevelListener nll:mNewLevelListeners)
-//            nll.newLevel(maxValue);
     }
 
     private void alertNextLevel(){
@@ -897,8 +870,6 @@ public class GameView extends View
 
     public void playNextLevel(){
         updateMaxValues();
-        Log.i("GameView","Max values");
-        printMaxSquareValues();
         resume();
     }
 
@@ -933,7 +904,6 @@ public class GameView extends View
     }
 
     public long getDelay(){
-        Log.v("GameView", "delay time: " + mController.getRemainingTimeForDelay());
         return mController.getRemainingTimeForDelay();
     }
 

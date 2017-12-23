@@ -46,7 +46,7 @@ public class GameFragment extends Fragment {
     @BindView(R.id.next_level_name) TextView mTextViewNextLevel;
     private SaveGame mSaveGame;
     private HighScore mSavedHighScore;
-    String mGameType;
+    private String mGameType;
 
     @Nullable
     @Override
@@ -86,8 +86,6 @@ public class GameFragment extends Fragment {
             @Override
             public void newLevel(int maxValue) {
                 mButtonPause.setEnabled(false);
-                Log.i("GameFragment","Max values");
-                mGameView.printMaxSquareValues();
                 mTextViewNextLevel.setText(getValueAsString(maxValue));
                 mLayoutGameWin.setVisibility(View.VISIBLE);
             }
@@ -179,13 +177,12 @@ public class GameFragment extends Fragment {
             mLayoutGamePaused.setVisibility(View.INVISIBLE);
             mLayoutGameWin.setVisibility(View.INVISIBLE);
             if(mGameType.equals(GameType.GAME_SIZE_NORMAL))
-                mGameView.setParamters(8, 4, 5, 3, 8, 11,
-                        maxWidth, maxHeight,5000,2000,10);
+                mGameView.setParamters(8, 4, 5, 3, 6, 11,
+                        maxWidth, maxHeight,3000,2000,250);
             else
                 mGameView.setParamters(10, 6, 7, 3, 8, 11,
-                        maxWidth, maxHeight,5000,2000,1);
+                        maxWidth, maxHeight,2400,1400,250);
         }
-
         mLayoutGameOver.setVisibility(View.INVISIBLE);
     }
 

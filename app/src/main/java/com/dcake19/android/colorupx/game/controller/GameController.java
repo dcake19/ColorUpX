@@ -23,8 +23,7 @@ public class GameController {
     private GameView mGameView;
     private GameBoard mGameBoard;
     private IntervalObservableOnSubscribe mIntervalObservableOnSubscribe;
-    //private int mInterval = 1250;
-    private int mInitialInterval = 5000;
+    private int mInitialInterval = 3000;
     private int mMinInterval = 2000;
     private int mLevelUpScore = 10;
     private int mLevel = 1;
@@ -39,7 +38,7 @@ public class GameController {
         mGameView = gameView;
         mGameBoard = new GameBoard(rows,columns,boardStartRow,minBoardRows,maxSquareValue);
         mGameBoard.createRandomBoard(intialSquares);
-        mGameView.setBoard(mGameBoard.getBoard());
+        mGameView.setBoard(mGameBoard.getBoard(),maxSquareValue);
         addFallingSquares(delay);
         mInitialInterval = initialInterval;
         mMinInterval = minInterval;
@@ -52,7 +51,7 @@ public class GameController {
                           int initialInterval,int minInterval,int levelUpScore) {
         mGameView = gameView;
         mGameBoard = new GameBoard(board,score,boardStartRow,minBoardRows,maxSquareValue);
-        if(displayBoard) mGameView.setBoard(mGameBoard.getBoard());
+        if(displayBoard) mGameView.setBoard(mGameBoard.getBoard(),maxSquareValue);
         addFallingSquares(delay);
         mInitialInterval = initialInterval;
         mMinInterval = minInterval;
@@ -65,7 +64,7 @@ public class GameController {
                           int initialInterval,int minInterval,int levelUpScore) {
         mGameView = gameView;
         mGameBoard = new GameBoard(board,score,boardStartRow,minBoardRows,maxSquareValue);
-        if(displayBoard) mGameView.setBoard(mGameBoard.getBoard());
+        if(displayBoard) mGameView.setBoard(mGameBoard.getBoard(),maxSquareValue);
         mInitialInterval = initialInterval;
         mMinInterval = minInterval;
         mLevelUpScore = levelUpScore;
@@ -135,14 +134,13 @@ public class GameController {
         ArrayList<UpdateSquare> updates = mGameBoard.getUpdates(direction);
 
         if(updates.size()>0) {
-            mIntervalObservableOnSubscribe.setInterval(
+            if(mIntervalObservableOnSubscribe!=null)mIntervalObservableOnSubscribe.setInterval(
                    getCurrentInterval());
-            displayBoard();
             mGameView.update(updates,mGameBoard.getBoard(),mGameBoard.getLastDirection());
             mGameView.setWellRows(mGameBoard.getWellRows());
             if(mGameBoard.getScore()/mLevelUpScore >= mLevel) {
                 setLevel();
-                mGameView.newLevel(getMaxSquarevalue());
+                mGameView.newLevel();
             }
         }else{
             mGameView.modelFinishedUpdating();
@@ -150,21 +148,20 @@ public class GameController {
         }
     }
 
-    private void displayBoard(){
-        Log.i("GameController","Game Board");
-        String board = "";
-        for(int i=0;i<mGameBoard.getBoard().length;i++) {
-            for (int j = 0; j < mGameBoard.getBoard()[i].length; j++) {
-                board += mGameBoard.getBoard()[i][j];
-                if (j != mGameBoard.getBoard()[i].length - 1) board += ",";
-            }
-            board += "\n";
-        }
-        Log.i("",board);
-    }
+//    private void displayBoard(){
+//        Log.i("GameController","Game Board");
+//        String board = "";
+//        for(int i=0;i<mGameBoard.getBoard().length;i++) {
+//            for (int j = 0; j < mGameBoard.getBoard()[i].length; j++) {
+//                board += mGameBoard.getBoard()[i][j];
+//                if (j != mGameBoard.getBoard()[i].length - 1) board += ",";
+//            }
+//            board += "\n";
+//        }
+//        Log.i("",board);
+//    }
 
     private void setLevel(){
-       // Log.i("GameController","Score: " + mGameBoard.getScore()+ " N")
         int level = (int) mGameBoard.getScore() / (mLevelUpScore) + 1;
         mGameBoard.increaseMaxSquareValue(level - mLevel);
         mLevel = level;

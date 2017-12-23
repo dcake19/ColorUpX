@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class AnimatableRectF extends RectF {
 
@@ -15,6 +16,7 @@ public class AnimatableRectF extends RectF {
     private Paint mShapeForegroundPaint;
     private Paint mTextPaint;
     private Context mContext;
+    private boolean mNewTextSizeSet = false;
 
     public AnimatableRectF(Context context,float left, float top, float right, float bottom,int squareCornerRadius,int value) {
         super(left, top, right, bottom);
@@ -106,8 +108,10 @@ public class AnimatableRectF extends RectF {
     }
 
     public void incrementValue(){
-        if(mValue<mMaxValue)
+        if(mValue<mMaxValue) {
+            mNewTextSizeSet = false;
             mValue++;
+        }
         setColor();
     }
 
@@ -121,14 +125,22 @@ public class AnimatableRectF extends RectF {
 
     public void drawToCanvas(Canvas canvas){
         canvas.drawRoundRect(this,mSquareCornerRadius,mSquareCornerRadius,mShapeForegroundPaint);
-        if(mValue > mMaxValueColor) setNewTextSize();
+        if(mValue > mMaxValueColor && !mNewTextSizeSet) setNewTextSize();
         canvas.drawText(getText(),(right+left)/2,(bottom+top)/2 + mTextPaint.getTextSize()*3/8,mTextPaint);
     }
 
     private String getText(){
         if(mValue<20) {
-            Integer text = (int) Math.pow(2, mValue);
-            return text.toString();
+            if(mTextPaint.getTextSize()<7.0 && mValue>13){
+                Integer i = (int) Math.pow(2, mValue);
+                String text = i.toString();
+                text = text.substring(0,text.length()-3) + "K";
+                setTextSize();
+                return text;
+            }else {
+                Integer text = (int) Math.pow(2, mValue);
+                return text.toString();
+            }
         }else if(mValue<30){
             Integer text = (int) Math.pow(2, mValue-20);
             return text.toString() + "M";
@@ -161,5 +173,9 @@ public class AnimatableRectF extends RectF {
             mTextPaint.setTextSize(mTextPaint.getTextSize()-1);
             textWidth = mTextPaint.measureText(getText());
         }
+        mNewTextSizeSet = true;
+        Log.i("AnimatableReftF","Value: "+mValue);
+        Log.i("AnimatableReftF","Text Width: "+textWidth);
+        Log.i("AnimatableReftF","Text Size: "+mTextPaint.getTextSize());
     }
 }

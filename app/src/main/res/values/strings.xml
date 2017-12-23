@@ -25,10 +25,10 @@
 
     <string name="instructions_page_1">Swipe the grid and all tiles will move in that direction as far as possible.
     If two identical adjacent tiles touch then the numbers will add up to form a new tile and 1 point will be added to your score.
-    When two 2048 tiles merge they disappear.</string>
+    When two 2048 tiles merge they disappear. Reach 250 points to win.</string>
     <string name="instructions_page_2">Tiles fall from the well to the grid.
     When the new tile is added above the grid, the grid increases size.
     When no tiles ocupy the top row, the grid size is reduced.</string>
-    <string name="instructions_page_3">The falling tiles column can be changed by tapping left or right of the tile.
-    Tiles can also be moved quickly to the edge by swiping.</string>
+    <string name="instructions_page_3">The falling tiles column can be changed by tapping left or right of the tile,
+        multiple taps will move the tile multiple columns.Tiles can also be moved quickly to the edge by swiping.</string>
 </resources>

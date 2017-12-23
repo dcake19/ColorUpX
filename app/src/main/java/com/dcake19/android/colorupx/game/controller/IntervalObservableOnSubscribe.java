@@ -1,6 +1,7 @@
 package com.dcake19.android.colorupx.game.controller;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -11,17 +12,17 @@ public class IntervalObservableOnSubscribe implements ObservableOnSubscribe<Inte
     private Integer id = 0;
     private AtomicBoolean subscribed = new AtomicBoolean(true);
     private AtomicBoolean playing = new AtomicBoolean(true);
-    private int interval;
+    private AtomicInteger interval = new AtomicInteger();
     private long remaining = 0;
 
     IntervalObservableOnSubscribe(int interval, boolean playAtStart,long remaining) {
-        this.interval = interval;
+        this.interval.set(interval);
         this.remaining = remaining;
-        playing.set(playAtStart); ;
+        playing.set(playAtStart);
     }
 
     @Override
-    public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+    public synchronized void subscribe(ObservableEmitter<Integer> e) throws Exception {
         thread = Thread.currentThread();
 
         long startTime = System.currentTimeMillis();
@@ -31,19 +32,25 @@ public class IntervalObservableOnSubscribe implements ObservableOnSubscribe<Inte
                     startTime = System.currentTimeMillis() ;
                     Thread.sleep(remaining);
                     e.onNext(++id);
-                    remaining = interval;
+                    remaining = interval.get();
                 } catch (InterruptedException e1) {
                     remaining = remaining
                             - (System.currentTimeMillis() - startTime);
                     break;
                 }
             }
+            try {
+                wait();
+            } catch (InterruptedException ie) {}
         }
     }
 
 
     public void resume() {
-        playing.set(true);
+        if(subscribed.get()) {
+            playing.set(true);
+            thread.interrupt();
+        }
     }
 
     public void pause() {
@@ -61,6 +68,6 @@ public class IntervalObservableOnSubscribe implements ObservableOnSubscribe<Inte
     }
 
     public void setInterval(int interval){
-        this.interval = interval;
+        this.interval.set(interval);
     }
 }
