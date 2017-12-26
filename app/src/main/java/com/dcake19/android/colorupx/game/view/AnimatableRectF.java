@@ -5,7 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
+//import android.util.Log;
 
 public class AnimatableRectF extends RectF {
 
@@ -174,8 +174,5 @@ public class AnimatableRectF extends RectF {
             textWidth = mTextPaint.measureText(getText());
         }
         mNewTextSizeSet = true;
-        Log.i("AnimatableReftF","Value: "+mValue);
-        Log.i("AnimatableReftF","Text Width: "+textWidth);
-        Log.i("AnimatableReftF","Text Size: "+mTextPaint.getTextSize());
     }
 }

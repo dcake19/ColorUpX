@@ -148,7 +148,7 @@ public class GameView extends View
     }
 
     private void initColors(){
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP){
+        if(Build.VERSION.SDK_INT <= 22){
             mBackgroundColor = getContext().getResources().getColor(R.color.colorBackground);
             mEmptySquareColor = getContext().getResources().getColor(R.color.colorEmpty);
         }else {

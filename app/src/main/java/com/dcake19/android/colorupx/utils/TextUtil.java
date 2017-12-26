@@ -1,6 +1,5 @@
 package com.dcake19.android.colorupx.utils;
 
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -40,14 +39,13 @@ public class TextUtil {
             resourceId = R.color.colorBackground;
         }
 
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP){
+        if(Build.VERSION.SDK_INT <= 22){
             color = context.getResources().getColor(resourceId);
         }else {
             color = getApi23LetterColor(context,resourceId);
         }
 
         return color;
-
     }
 
     @TargetApi(23)
