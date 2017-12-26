@@ -819,7 +819,8 @@ public class GameView extends View
     public boolean onFling(MotionEvent motionEvent1, MotionEvent motionEvent2, float velocityX, float velocityY) {
         if(!mGamePaused) {
             // true if the fling is in the well, false if in the board
-            boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 1);
+            boolean well = motionEvent1.getY() < getPxLocation(mBoardStartRow - 1) &&
+                    motionEvent1.getY() > getPxLocation(0) ;
             boolean board = motionEvent1.getY() > getPxLocation(mBoardStartRow - 1);
             float horizontal = motionEvent1.getX() - motionEvent2.getX();
             float vertical = motionEvent1.getY() - motionEvent2.getY();

@@ -64,7 +64,6 @@ public class GameBoard {
 
     public void increaseMaxSquareValue(int increase){
         mMaxSquareValue += increase;
-        Log.i("GameBoard","Max value: " + mMaxSquareValue);
     }
 
     public int getWellRows(){

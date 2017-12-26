@@ -119,13 +119,16 @@ public class GameController {
         Consumer<FallingSquare> consumer = new Consumer<FallingSquare>() {
             @Override
             public void accept(@NonNull FallingSquare fs) throws Exception {
-                mGameView.addFallingSquare(fs.position,fs.value,fs.key);
+                addFallingSquare(fs);
             }
         };
-
         mObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(consumer);
+    }
+
+    private synchronized void addFallingSquare(FallingSquare fs){
+        if(!mGameBoard.gameOver()) mGameView.addFallingSquare(fs.position,fs.value,fs.key);
     }
 
     public synchronized void swipe(int direction) {
