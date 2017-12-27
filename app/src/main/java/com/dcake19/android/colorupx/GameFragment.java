@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.dcake19.android.colorupx.game.view.GameView;
 import com.dcake19.android.colorupx.saving.SaveGame;
 import com.dcake19.android.colorupx.saving.SaveGameState;
-import com.dcake19.android.colorupx.saving.SavedAnimatableRectF;
 import com.dcake19.android.colorupx.utils.GameType;
 import com.dcake19.android.colorupx.utils.TextUtil;
 
