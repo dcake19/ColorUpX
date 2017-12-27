@@ -14,7 +14,7 @@
 
     <string name="play_game">PLAY GAME</string>
     <string name="instructions">INSTRUCTIONS</string>
-
+    <string name="question_mark">\u003f</string>
     <string name="you_win">YOU WIN!</string>
     <string name="play">PLAY</string>
     <string name="next_level">NEXT LEVEL:</string>
@@ -31,4 +31,7 @@
     When no tiles ocupy the top row, the grid size is reduced.</string>
     <string name="instructions_page_3">The falling tiles column can be changed by tapping left or right of the tile,
         multiple taps will move the tile multiple columns.Tiles can also be moved quickly to the edge by swiping.</string>
+
+
+    <string name="link_rate">https://play.google.com/store/apps/details?id=com.dcake19.android.colorupx</string>
 </resources>
