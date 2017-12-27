@@ -1,11 +1,9 @@
 package com.dcake19.android.colorupx.game.view;
 
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-//import android.util.Log;
 
 public class AnimatableRectF extends RectF {
 
