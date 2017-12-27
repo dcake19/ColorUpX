@@ -23,12 +23,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         FragmentManager fm = getSupportFragmentManager();
@@ -56,11 +50,6 @@ public class GameActivity extends AppCompatActivity {
         fragmentTransaction.remove(mFragment);
         fragmentTransaction.commit();
         mFragment = null;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     public static Intent getIntent(Context context, String gameSize){

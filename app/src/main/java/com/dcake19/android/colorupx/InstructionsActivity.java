@@ -40,20 +40,40 @@ public class InstructionsActivity extends AppCompatActivity {
         mTextPageNumber.setText(mPageNumber + "/" + TOTAL_PAGES);
 
         mButtonPrevious.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         FragmentManager fm = getSupportFragmentManager();
         mFragment = (InstructionsFragment) fm.findFragmentByTag(FRAGMENT);
 
-        if(mFragment ==null) {
-            mFragment = new InstructionsFragment();
-            Bundle args = new Bundle();
-            args.putInt(PAGE,mPageNumber);
-            mFragment.setArguments(args);
+        if(mFragment != null){
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-            fragmentTransaction.add(R.id.instructions_content, mFragment, FRAGMENT);
+            fragmentTransaction.remove(mFragment);
             fragmentTransaction.commit();
+            mFragment = null;
         }
+
+        mFragment = new InstructionsFragment();
+        Bundle args = new Bundle();
+        args.putInt(PAGE,mPageNumber);
+        mFragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        fragmentTransaction.add(R.id.instructions_content, mFragment, FRAGMENT);
+        fragmentTransaction.commit();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(mFragment);
+        fragmentTransaction.commit();
+        mFragment = null;
     }
 
     private void setTextColors(){
