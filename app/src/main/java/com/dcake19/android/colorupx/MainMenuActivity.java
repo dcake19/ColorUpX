@@ -1,6 +1,7 @@
 package com.dcake19.android.colorupx;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -20,7 +21,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @BindView(R.id.play_game) TextView mTextViewPlayGame;
     @BindView(R.id.btn_play_game_normal) Button mButtonPlayGameNormal;
     @BindView(R.id.btn_play_game_large) Button mButtonPlayGameLarge;
-    @BindView(R.id.btn_instructions) Button mButtonInstructions;
+    //@BindView(R.id.btn_instructions) Button mButtonInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private void setTextColors(){
         mTextViewTitleNumber.setText(TextUtil.getMultiColorString(this,"2048"));
         mTextViewTitleLetters.setText(TextUtil.getMultiColorString(this,getString(R.string.downfall),4));
-        mButtonInstructions.setAllCaps(false);
-        mButtonInstructions.setText(TextUtil.getMultiColorString(this,getString(R.string.instructions)));
+        //mButtonInstructions.setAllCaps(false);
+       // mButtonInstructions.setText(TextUtil.getMultiColorString(this,getString(R.string.instructions)));
         mTextViewPlayGame.setText(TextUtil.getMultiColorString(this,getString(R.string.select_game)));
         mButtonPlayGameNormal.setAllCaps(false);
         mButtonPlayGameNormal.setText(TextUtil.getMultiColorString(this,getString(R.string.normal)));
@@ -57,4 +58,10 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(GameActivity.getIntent(this, GameType.GAME_SIZE_LARGE));
     }
 
+    @OnClick(R.id.btn_rate)
+    public void rateApp(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.link_rate)));
+        if (intent.resolveActivity(getPackageManager()) != null)
+            startActivity(intent);
+    }
 }

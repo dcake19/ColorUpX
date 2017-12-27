@@ -10,6 +10,7 @@
     <color name="colorBackground2">#FFF9D4</color>
     <color name="colorEmpty">#CCCCCC</color>
     <color name="colorButton">#212121</color>
+    <color name="colorButtonIcons">#FFFFFF</color>
 
     <color name="colorSquare1">#E91E63</color>
     <color name="colorSquare2">#9C27B0</color>
