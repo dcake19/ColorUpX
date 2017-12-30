@@ -9,6 +9,12 @@ import android.widget.TextView;
 
 import com.dcake19.android.colorupx.utils.GameType;
 import com.dcake19.android.colorupx.utils.TextUtil;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,13 +27,55 @@ public class MainMenuActivity extends AppCompatActivity {
     @BindView(R.id.play_game) TextView mTextViewPlayGame;
     @BindView(R.id.btn_play_game_normal) Button mButtonPlayGameNormal;
     @BindView(R.id.btn_play_game_large) Button mButtonPlayGameLarge;
+    @BindView(R.id.ad_view) AdView mBannerAdView;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu_activity);
         ButterKnife.bind(this);
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.play_game_interstitial_admob_id));
+        requestNewInterstitial();
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("E10756F1ADABBEB6CAA9455E812C7D30")
+               //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        mBannerAdView.loadAd(adRequest);
         setTextColors();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(!mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) requestNewInterstitial();
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("E10756F1ADABBEB6CAA9455E812C7D30")
+              //  .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    private void playGame(final String gameType) {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    startActivity(GameActivity.getIntent(MainMenuActivity.this, gameType));
+                }
+            });
+            mInterstitialAd.show();
+        }else{
+            startActivity(GameActivity.getIntent(MainMenuActivity.this, gameType));
+        }
     }
 
     private void setTextColors(){
@@ -47,12 +95,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_play_game_normal)
     public void playNormal(){
-        startActivity(GameActivity.getIntent(this, GameType.GAME_SIZE_NORMAL));
+        playGame(GameType.GAME_SIZE_NORMAL);
     }
 
     @OnClick(R.id.btn_play_game_large)
     public void playLarge(){
-        startActivity(GameActivity.getIntent(this, GameType.GAME_SIZE_LARGE));
+        playGame(GameType.GAME_SIZE_LARGE);
     }
 
     @OnClick(R.id.btn_rate)
