@@ -4,10 +4,10 @@ apply plugin: 'com.neenbedankt.android-apt'
 android {
     signingConfigs {
         config {
-            keyAlias ''
-            keyPassword ''
-            storeFile file('C:/keystore.jks')
-            storePassword ''
+            keyAlias 'daniel'
+            keyPassword 'abcxyz123456'
+            storeFile file('C:/Users/Daniel/Documents/Android/ColorUpX/ColorUpX/keystore.jks')
+            storePassword 'abcxyz123456'
         }
     }
     compileSdkVersion 25
@@ -48,4 +48,6 @@ dependencies {
     //Rx
     compile 'io.reactivex.rxjava2:rxjava:2.0.5'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    // AdMob
+    compile 'com.google.android.gms:play-services-ads:11.0.2'
 }

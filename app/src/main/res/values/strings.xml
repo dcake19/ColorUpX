@@ -34,4 +34,9 @@
 
 
     <string name="link_rate">https://play.google.com/store/apps/details?id=com.dcake19.android.colorupx</string>
+
+    <string name="admob_app_id">ca-app-pub-5786085834569826~4564549329</string>
+    <!-- test -->
+    <string name="main_banner_admob_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="play_game_interstitial_admob_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
