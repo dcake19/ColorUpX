@@ -43,7 +43,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("E10756F1ADABBEB6CAA9455E812C7D30")
-               //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+             //  .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
 
         mBannerAdView.loadAd(adRequest);
@@ -59,7 +59,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("E10756F1ADABBEB6CAA9455E812C7D30")
-              //  .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+             //   .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }

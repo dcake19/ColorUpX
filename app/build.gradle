@@ -4,10 +4,10 @@ apply plugin: 'com.neenbedankt.android-apt'
 android {
     signingConfigs {
         config {
-            keyAlias ''
-            keyPassword ''
-            storeFile file('C:/keystore.jks')
-            storePassword ''
+            keyAlias 'daniel'
+            keyPassword 'abcxyz123456'
+            storeFile file('C:/Users/Daniel/Documents/Android/ColorUpX/ColorUpX/keystore.jks')
+            storePassword 'abcxyz123456'
         }
     }
     compileSdkVersion 25
