@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     signingConfigs {
@@ -10,14 +10,14 @@ android {
             storePassword ''
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.dcake19.android.colorupx"
         minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 2
-        versionName "1.0.1"
+        targetSdkVersion 27
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,15 +36,15 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:cardview-v7:27.1.1'
     testCompile 'junit:junit:4.12'
     // Dagger
-    apt 'com.google.dagger:dagger-compiler:2.0.2'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
     compile 'com.google.dagger:dagger:2.0.2'
     // Butterknife
     compile 'com.jakewharton:butterknife:8.0.1'
-    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
     //Rx
     compile 'io.reactivex.rxjava2:rxjava:2.0.5'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'

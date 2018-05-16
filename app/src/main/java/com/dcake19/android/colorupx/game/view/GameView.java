@@ -32,8 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class GameView extends View
-        implements GestureDetector.OnGestureListener{
+public class GameView extends View implements GestureDetector.OnGestureListener{
 
     private GestureDetectorCompat mGestureDetector;
     protected GameController mController;
