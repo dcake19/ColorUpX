@@ -88,6 +88,13 @@ public class MainMenuActivity extends AppCompatActivity {
         mButtonPlayGameLarge.setText(TextUtil.getMultiColorString(this,getString(R.string.large)));
     }
 
+    @OnClick(R.id.btn_watch_video)
+    public void watchVideo(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.webpage_video)));
+        if (intent.resolveActivity(getPackageManager()) != null)
+            startActivity(intent);
+    }
+
     @OnClick(R.id.btn_instructions)
     public void instructions(){
         startActivity(new Intent(this,InstructionsActivity.class));

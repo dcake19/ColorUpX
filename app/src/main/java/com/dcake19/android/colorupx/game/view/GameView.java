@@ -32,8 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class GameView extends View
-        implements GestureDetector.OnGestureListener{
+public class GameView extends View implements GestureDetector.OnGestureListener{
 
     private GestureDetectorCompat mGestureDetector;
     protected GameController mController;
@@ -469,7 +468,20 @@ public class GameView extends View
 
                 for(int i=0;i<updatedBoard.length;i++) {
                     for (int j = 0; j < updatedBoard[i].length; j++) {
-                        if(updatedBoard[i][j]==0) mSquares[i][j] = null;
+                        if(updatedBoard[i][j]==0){
+                            mSquares[i][j] = null;}
+                        // introduced to change board to fit with model in case of error
+                        else if( mSquares[i][j] == null && updatedBoard[i][j]!=0){
+                            mSquares[i][j] = new AnimatableRectF(getContext(),
+                                mEmptySquares[i][j].left,mEmptySquares[i][j].top,
+                                mEmptySquares[i][j].right, mEmptySquares[i][j].bottom,
+                                mSquareCornerRadius, updatedBoard[i][j]);}
+                         else if(mSquares[i][j] != null && mSquares[i][j].getValue()!=updatedBoard[i][j]){
+                            mSquares[i][j] = new AnimatableRectF(getContext(),
+                                    mEmptySquares[i][j].left,mEmptySquares[i][j].top,
+                                    mEmptySquares[i][j].right, mEmptySquares[i][j].bottom,
+                                    mSquareCornerRadius, updatedBoard[i][j]);
+                        }
                     }
                 }
                 invalidate();
