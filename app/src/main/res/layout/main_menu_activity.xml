@@ -50,6 +50,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
+                <ImageButton
+                    android:id="@+id/btn_watch_video"
+                    app:srcCompat="@drawable/baseline_movie_white"
+                    android:background="@drawable/rounded_corner_dark"
+                    android:padding="@dimen/standard_padding"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="@dimen/pause_btn_size"
+                    android:layout_height="@dimen/pause_btn_size"
+                    android:layout_marginTop="@dimen/standard_margin"
+                    android:layout_marginBottom="@dimen/standard_margin"
+                    android:layout_marginRight="@dimen/large_margin"
+                    android:layout_marginLeft="@dimen/standard_margin"/>
+
                 <Button
                     android:id="@+id/btn_instructions"
                     android:background="@drawable/rounded_corner_dark"
@@ -63,7 +76,7 @@
                     android:layout_height="@dimen/pause_btn_size"
                     android:layout_marginTop="@dimen/standard_margin"
                     android:layout_marginBottom="@dimen/standard_margin"
-                    android:layout_marginLeft="@dimen/standard_margin"
+                    android:layout_marginLeft="@dimen/large_margin"
                     android:layout_marginRight="@dimen/large_margin"/>
 
                 <ImageButton

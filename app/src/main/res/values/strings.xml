@@ -39,4 +39,5 @@
     <!-- test -->
     <string name="main_banner_admob_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="play_game_interstitial_admob_id">	ca-app-pub-3940256099942544/1033173712</string>
+    <string name="webpage_video">https://www.youtube.com/watch?v=oXMofE0E2Ck</string>
 </resources>
