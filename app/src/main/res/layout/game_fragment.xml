@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:padding="@dimen/standard_padding"
             >
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 card_view:cardCornerRadius="@dimen/card_corner_radius"
@@ -54,9 +54,9 @@
                         android:textSize="@dimen/text_size_score"
                         tools:text="423"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/card_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                         android:textSize="@dimen/text_size_score"
                         android:text="0"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <ImageButton
                 android:id="@+id/btn_pause"

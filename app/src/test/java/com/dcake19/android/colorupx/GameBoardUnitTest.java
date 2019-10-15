@@ -4,12 +4,12 @@ import com.dcake19.android.colorupx.game.model.Coordinates;
 import com.dcake19.android.colorupx.game.model.GameBoard;
 import com.dcake19.android.colorupx.game.model.UpdateSquare;
 
-import org.junit.Test;
+//import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

@@ -1,7 +1,7 @@
 package com.dcake19.android.colorupx.game.controller;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 //import android.util.Log;
 import com.dcake19.android.colorupx.game.view.AnimatableRectF;
 import com.dcake19.android.colorupx.game.view.GameView;

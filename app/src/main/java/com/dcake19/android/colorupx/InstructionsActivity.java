@@ -1,9 +1,9 @@
 package com.dcake19.android.colorupx;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,10 +20,10 @@ public class InstructionsActivity extends AppCompatActivity {
     private final String FRAGMENT = "Instructions Fragment";
     public static final String PAGE = "page";
     private InstructionsFragment mFragment;
-    @BindView(R.id.instructions_title) TextView mTitle;
-    @BindView(R.id.btn_previous) ImageButton mButtonPrevious;
-    @BindView(R.id.btn_next) ImageButton mButtonNext;
-    @BindView(R.id.page_number) TextView mTextPageNumber;
+    @BindView(R2.id.instructions_title) TextView mTitle;
+    @BindView(R2.id.btn_previous) ImageButton mButtonPrevious;
+    @BindView(R2.id.btn_next) ImageButton mButtonNext;
+    @BindView(R2.id.page_number) TextView mTextPageNumber;
 
     private int mPageNumber = 1;
     private final int TOTAL_PAGES = 3;

@@ -2,7 +2,7 @@ package com.dcake19.android.colorupx;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,7 +11,6 @@ import com.dcake19.android.colorupx.utils.GameType;
 import com.dcake19.android.colorupx.utils.TextUtil;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
@@ -22,12 +21,12 @@ import butterknife.OnClick;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    @BindView(R.id.game_title_number) TextView mTextViewTitleNumber;
-    @BindView(R.id.game_title_letters) TextView mTextViewTitleLetters;
-    @BindView(R.id.play_game) TextView mTextViewPlayGame;
-    @BindView(R.id.btn_play_game_normal) Button mButtonPlayGameNormal;
-    @BindView(R.id.btn_play_game_large) Button mButtonPlayGameLarge;
-    @BindView(R.id.ad_view) AdView mBannerAdView;
+    @BindView(R2.id.game_title_number) TextView mTextViewTitleNumber;
+    @BindView(R2.id.game_title_letters) TextView mTextViewTitleLetters;
+    @BindView(R2.id.play_game) TextView mTextViewPlayGame;
+    @BindView(R2.id.btn_play_game_normal) Button mButtonPlayGameNormal;
+    @BindView(R2.id.btn_play_game_large) Button mButtonPlayGameLarge;
+    @BindView(R2.id.ad_view) AdView mBannerAdView;
     private InterstitialAd mInterstitialAd;
 
     @Override
